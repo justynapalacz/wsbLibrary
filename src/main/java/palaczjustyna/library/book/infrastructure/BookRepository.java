@@ -1,4 +1,7 @@
 package palaczjustyna.library.book.infrastructure;
 
-public interface BookRepository {
+import org.springframework.data.repository.CrudRepository;
+import palaczjustyna.library.book.domain.Book;
+
+public interface BookRepository extends CrudRepository<Book, Integer> {
 }
