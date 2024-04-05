@@ -21,9 +21,9 @@ public class Book {
     @Column(name = "author")
     private String author;
     @Column (name = "status")
-    private boolean status;
+    private Boolean status;
 
-    public Book(String title, String author, boolean status) {
+    public Book(String title, String author, Boolean status) {
         this.title = title;
         this.author = author;
         this.status = status;
