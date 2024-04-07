@@ -12,12 +12,17 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Book> getAllBooks() {
-        return (List<Book>) bookRepository.findAll();
+    @Autowired
+    private BookMapper bookMapper;
+
+    public List<BookDTO> getAllBooks() {
+        List <Book> resultList = (List<Book>) bookRepository.findAll();
+        return bookMapper.mapToBookListDTO(resultList);
     }
 
-    public List<Book> getBookByTitle(String title) {
-        return bookRepository.findByTitle(title);
+    public List<BookDTO> getBookByTitle(String title) {
+        List <Book> resultList = bookRepository.findByTitle(title);
+        return bookMapper.mapToBookListDTO(resultList);
     }
 
     public Book addBook(BookCreateDTO book) {
@@ -44,5 +49,9 @@ public class BookService {
             book.setStatus(bookUpdate.status());
         }
         return bookRepository.save(book);
+    }
+
+    public Book findById(Integer id) {
+        return bookRepository.findById(id).get();
     }
 }

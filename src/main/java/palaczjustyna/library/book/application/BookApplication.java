@@ -2,10 +2,7 @@ package palaczjustyna.library.book.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import palaczjustyna.library.book.domain.Book;
-import palaczjustyna.library.book.domain.BookCreateDTO;
-import palaczjustyna.library.book.domain.BookService;
-import palaczjustyna.library.book.domain.BookUpdateDTO;
+import palaczjustyna.library.book.domain.*;
 
 import java.util.List;
 
@@ -15,12 +12,16 @@ public class BookApplication {
     @Autowired
     private BookService bookService;
 
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 
-    public List<Book> getBookByTitle(String title) {
+    public List<BookDTO> getBookByTitle(String title) {
         return bookService.getBookByTitle(title);
+    }
+
+    public Book findById (Integer id){
+        return bookService.findById(id);
     }
 
     public Book addBook(BookCreateDTO book) {

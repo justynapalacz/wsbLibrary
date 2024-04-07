@@ -5,10 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import palaczjustyna.library.book.domain.Book;
-import palaczjustyna.library.book.domain.BookCreateDTO;
-import palaczjustyna.library.book.domain.BookService;
-import palaczjustyna.library.book.domain.BookUpdateDTO;
+import palaczjustyna.library.book.domain.*;
 
 import java.util.List;
 
@@ -27,9 +24,9 @@ class BookApplicationTest {
     public void testShouldReturnAllBooks() {
         //given
         Integer id=1;
-        Book book = new Book();
-        book.setId(id);
-        when(bookService.getAllBooks()).thenReturn(List.of(book));
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(id);
+        when(bookService.getAllBooks()).thenReturn(List.of(bookDTO));
 
         //when
         var result = bookApplication.getAllBooks();
@@ -44,7 +41,7 @@ class BookApplicationTest {
     void testShouldReturnBookByTitle() {
         //given
         String title = "Pan Tadeusz";
-        Book book = new Book();
+        BookDTO book = new BookDTO();
         book.setTitle(title);
         when(bookService.getBookByTitle(title)).thenReturn(List.of(book));
 

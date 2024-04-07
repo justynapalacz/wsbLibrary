@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import palaczjustyna.library.book.application.BookApplication;
 import palaczjustyna.library.book.domain.Book;
 import palaczjustyna.library.book.domain.BookCreateDTO;
+import palaczjustyna.library.book.domain.BookDTO;
 import palaczjustyna.library.book.domain.BookUpdateDTO;
 
 import java.util.List;
@@ -16,12 +17,12 @@ public class BookController {
     private BookApplication bookApplication;
 
     @GetMapping("/getBooks")
-    List<Book> getAllBooks() {
+    List<BookDTO> getAllBooks() {
         return bookApplication.getAllBooks();
     }
 
     @GetMapping("/getBookByTitle")
-    List<Book> getBookByTitle(@RequestParam(value = "title")  String title){
+    List<BookDTO> getBookByTitle(@RequestParam(value = "title")  String title){
         return bookApplication.getBookByTitle(title);
     }
 

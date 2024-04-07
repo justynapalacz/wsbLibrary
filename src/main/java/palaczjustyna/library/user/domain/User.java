@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import palaczjustyna.library.borrow.domain.Borrow;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Setter
@@ -27,6 +29,9 @@ public class User {
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+
+    @OneToMany (mappedBy = "user")
+    private List<Borrow> borrowList;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth) {
         this.firstName = firstName;

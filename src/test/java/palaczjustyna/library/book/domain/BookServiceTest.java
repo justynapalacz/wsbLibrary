@@ -21,6 +21,9 @@ class BookServiceTest {
 
     @Mock
     private BookRepository bookRepository;
+    @Mock
+    private BookMapper bookMapper;
+
     @InjectMocks
     private BookService bookService;
 
@@ -31,6 +34,10 @@ class BookServiceTest {
         Book book = new Book();
         book.setId(id);
         when(bookRepository.findAll()).thenReturn(List.of(book));
+
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(id);
+        when(bookMapper.mapToBookListDTO(any())).thenReturn(List.of(bookDTO));
 
         //when
         var result = bookService.getAllBooks();
@@ -49,6 +56,10 @@ class BookServiceTest {
         Book book = new Book();
         book.setTitle(title);
         when(bookRepository.findByTitle(title)).thenReturn(List.of(book));
+
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setTitle(title);
+        when(bookMapper.mapToBookListDTO(any())).thenReturn(List.of(bookDTO));
 
         //when
         var result = bookService.getBookByTitle(title);

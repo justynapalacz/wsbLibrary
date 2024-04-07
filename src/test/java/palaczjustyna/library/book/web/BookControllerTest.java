@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import palaczjustyna.library.book.application.BookApplication;
 import palaczjustyna.library.book.domain.Book;
 import palaczjustyna.library.book.domain.BookCreateDTO;
+import palaczjustyna.library.book.domain.BookDTO;
 import palaczjustyna.library.book.domain.BookUpdateDTO;
 
 import java.util.List;
@@ -29,9 +30,9 @@ class BookControllerTest {
     public void testShouldReturnAllBooks() {
         //given
         Integer id = 1;
-        Book book = new Book();
-        book.setId(id);
-        when(bookApplication.getAllBooks()).thenReturn(List.of(book));
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(id);
+        when(bookApplication.getAllBooks()).thenReturn(List.of(bookDTO));
 
         //when
         var result = bookController.getAllBooks();
@@ -46,7 +47,7 @@ class BookControllerTest {
     public void testShouldReturnBookByTitle() {
         //given
         String title = "Dziady";
-        Book book = new Book();
+        BookDTO book = new BookDTO();
         book.setTitle(title);
         when(bookApplication.getBookByTitle(title)).thenReturn(List.of(book));
 

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import palaczjustyna.library.borrow.domain.Borrow;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +25,9 @@ public class Book {
     private String author;
     @Column (name = "status")
     private Boolean status;
+
+    @OneToMany (mappedBy = "book")
+    List<Borrow> borrowList;
 
     public Book(String title, String author, Boolean status) {
         this.title = title;
