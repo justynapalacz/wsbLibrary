@@ -1,6 +1,7 @@
 package palaczjustyna.library.borrow.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import palaczjustyna.library.borrow.application.BorrowApplication;
 import palaczjustyna.library.borrow.domain.BorrowCreateDTO;
@@ -15,20 +16,22 @@ public class BorrowController {
     private BorrowApplication borrowApplication;
 
     @GetMapping("/getBorrows")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     List<BorrowDTO> getAllBorrows() {
         return borrowApplication.getAllBorrows();
     }
 
     @GetMapping("/getBorrowsById")
+    @PreAuthorize("hasAuthority('ROLE_READER')")
     BorrowDTO getBorrowsById(@RequestParam(value = "id")  Integer id) {
         return borrowApplication.getBorrowsById(id);
     }
 
     @PostMapping("/addBorrow")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     String addBorrow(@RequestBody BorrowCreateDTO borrowCreateDTO){
         borrowApplication.addBorrow(borrowCreateDTO);
         return "Successfully created barrow";
     }
-
 
 }

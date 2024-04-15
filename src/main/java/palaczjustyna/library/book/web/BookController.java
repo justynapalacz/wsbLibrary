@@ -3,6 +3,7 @@ package palaczjustyna.library.book.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import palaczjustyna.library.book.application.BookApplication;
 import palaczjustyna.library.book.domain.Book;
@@ -20,6 +21,7 @@ public class BookController {
     private BookApplication bookApplication;
 
     @GetMapping("/getBooks")
+    @PreAuthorize("hasAuthority('ROLE_READER')")
     List<BookDTO> getAllBooks() {
         return bookApplication.getAllBooks();
     }
@@ -28,22 +30,26 @@ public class BookController {
     summary = "Retrieve a Books by title",
     description = "Get a Books object by specifying title. The response are books with  given title.")
     @GetMapping("/getBookByTitle")
+    @PreAuthorize("hasAuthority('ROLE_READER')")
     List<BookDTO> getBookByTitle(@RequestParam(value = "title")  String title){
         return bookApplication.getBookByTitle(title);
     }
 
     @PostMapping("/addBook")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     Book addBook(@RequestBody BookCreateDTO book){
         return bookApplication.addBook(book);
     }
 
     @DeleteMapping("/deleteBook")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     void deleteBook (@RequestParam(value = "id")  Integer id){
         bookApplication.deleteBook(id);
     }
 
     @PutMapping ("/updateBook")
-    Book updateBook(@RequestBody BookUpdateDTO book){
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    BookDTO updateBook(@RequestBody BookUpdateDTO book){
         return bookApplication.updateBook (book);
     }
 }

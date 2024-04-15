@@ -33,7 +33,7 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public Book updateBook(BookUpdateDTO bookUpdate) {
+    public BookDTO updateBook(BookUpdateDTO bookUpdate) {
         Optional<Book> bookOpt = bookRepository.findById(bookUpdate.id());
         if (bookOpt.isEmpty()) {
             throw new IllegalArgumentException("The book with id = " +  bookUpdate.id() + " was not found" );
@@ -48,10 +48,10 @@ public class BookService {
         if (bookUpdate.status() != null) {
             book.setStatus(bookUpdate.status());
         }
-        return bookRepository.save(book);
+        return bookMapper.mapToBookDTO(bookRepository.save(book));
     }
 
     public Book findById(Integer id) {
-        return bookRepository.findById(id).get();
+        return bookRepository.findById(id).orElseThrow();
     }
 }

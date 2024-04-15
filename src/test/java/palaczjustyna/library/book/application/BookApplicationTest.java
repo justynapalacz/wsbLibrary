@@ -96,7 +96,7 @@ class BookApplicationTest {
         String author = "Adam Mickiewicz2";
         Boolean status = true;
         BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, status);
-        Book book = new Book();
+        BookDTO book = new BookDTO();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);

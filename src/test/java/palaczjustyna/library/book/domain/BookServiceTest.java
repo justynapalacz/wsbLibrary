@@ -112,17 +112,25 @@ class BookServiceTest {
         String title = "Proces2";
         String author = "Franz Kafka2";
         Boolean status = true;
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, status);
+        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(id, title, author, status);
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
         book.setStatus(status);
+
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(id);
+        bookDTO.setTitle(title);
+        bookDTO.setAuthor(author);
+        bookDTO.setStatus(status);
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
         when(bookRepository.save(any())).thenReturn(book);
+        when(bookMapper.mapToBookDTO(any())).thenReturn(bookDTO);
+
 
         //when
-        var result = bookService.updateBook(bookDTO);
+        var result = bookService.updateBook(bookUpdateDTO);
 
         //then
         assertNotNull(result);

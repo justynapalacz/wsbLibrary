@@ -32,7 +32,7 @@ public class BookApplication {
         bookService.deleteBook(id);
     }
 
-    public Book updateBook(BookUpdateDTO book) {
+    public BookDTO updateBook(BookUpdateDTO book) {
         return bookService.updateBook(book);
     }
 }
