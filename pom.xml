@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>palaczjustyna</groupId>
 	<artifactId>library</artifactId>
@@ -15,6 +15,10 @@
 	<description>Library management project</description>
 	<properties>
 		<java.version>21</java.version>
+		<dbUrl>jdbc:mysql://localhost:3306/library</dbUrl>
+		<dbUser>root</dbUser>
+		<dbPwd>root</dbPwd>
+		<dropFirst>false</dropFirst>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,6 +49,10 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.6.0.Beta1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -87,6 +95,27 @@
 						</compilerArg>
 					</compilerArgs>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<changeLogFile>liquibase/changelog-master.xml</changeLogFile>
+					<url>${dbUrl}</url>
+					<driver>com.mysql.cj.jdbc.Driver</driver>
+					<username>${dbUser}</username>
+					<password>${dbPwd}</password>
+					<dropFirst>${dropFirst}</dropFirst>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>update</goal>
+						</goals>
+						<phase>process-resources</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
