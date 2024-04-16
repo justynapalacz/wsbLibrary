@@ -1,5 +1,6 @@
 package palaczjustyna.library.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,30 +15,44 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import palaczjustyna.library.user.application.UserApplication;
+import palaczjustyna.library.user.domain.UserDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private UserApplication userApplication;
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+        List<UserDetails> readers = new ArrayList<>();
         UserDetails admin = User.withUsername("Justyna")
                 .password(encoder.encode("Justyna"))
                 .roles("ADMIN", "LIBRARIAN", "READER")
                 .build();
+        readers.add(admin);
 
         UserDetails librarian = User.withUsername("Marcin")
                 .password(encoder.encode("Marcin"))
                 .roles("LIBRARIAN", "READER")
                 .build();
+        readers.add(librarian);
 
-        UserDetails reader = User.withUsername("Andrzej")
-                .password(encoder.encode("Andrzej"))
-                .roles("READER")
-                .build();
+        List<UserDTO>  userDTOList = userApplication.getAllUsers();
+        userDTOList.forEach(userDTO -> {
+            UserDetails reader = User.withUsername(userDTO.getLogin())
+                    .password(encoder.encode(userDTO.getPassword()))
+                    .roles("READER")
+                    .build();
+            readers.add(reader);
+        });
 
-        return new InMemoryUserDetailsManager(admin, librarian, reader);
+        return new InMemoryUserDetailsManager(readers);
     }
 
     @Bean

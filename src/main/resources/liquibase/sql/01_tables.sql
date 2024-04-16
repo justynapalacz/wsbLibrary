@@ -4,6 +4,8 @@ CREATE TABLE users (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR (100),
   last_name VARCHAR(100),
+  login VARCHAR(100),
+  password VARCHAR(100),
   date_of_birth DATE NOT NULL
 );
 

@@ -1,8 +1,8 @@
 --liquibase formatted sql
 --changeset Justyna Palacz:2
-INSERT INTO users(id, first_name, last_name,date_of_birth) VALUE(1,'Jan', 'Nowak', '1991-09-11');
-INSERT INTO users(id, first_name, last_name,date_of_birth) VALUE(2,'Adam', 'Kowalski', '1988-01-11');
-INSERT INTO users(id, first_name, last_name,date_of_birth) VALUE(3,'Ewa', 'Olszewska', '1988-01-11');
+INSERT INTO users(id, first_name, last_name,date_of_birth, login, password) VALUE(1,'Jan', 'Nowak', '1991-09-11','jannowak','jannowak');
+INSERT INTO users(id, first_name, last_name,date_of_birth, login, password) VALUE(2,'Adam', 'Kowalski', '1988-01-11','adamkowalski','adamkowalski');
+INSERT INTO users(id, first_name, last_name,date_of_birth, login, password) VALUE(3,'Ewa', 'Olszewska', '1988-01-11','ewaolszewska','ewaolszewska');
 
 INSERT INTO books(id, title, author,status) VALUE(1,'Pan Tadeusz', 'Adam Mickiewicz', 1);
 INSERT INTO books(id, title, author,status) VALUE(2,'Dziady', 'Adam Mickiewicz', 0);

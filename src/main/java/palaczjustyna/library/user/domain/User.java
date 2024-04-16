@@ -30,14 +30,20 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "password")
+    private String password;
+
     @OneToMany (mappedBy = "user")
     private List<Borrow> borrowList;
 
-    public User(String firstName, String lastName, LocalDate dateOfBirth) {
+    public User(String firstName, String lastName, LocalDate dateOfBirth, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
+        this.login = login;
+        this.password = password;
     }
-
-
 }

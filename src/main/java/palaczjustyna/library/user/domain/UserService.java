@@ -39,6 +39,12 @@ public class UserService {
         if (userUpdate.dateOfBirth() != null) {
             user.setDateOfBirth(userUpdate.dateOfBirth());
         }
+        if (userUpdate.login() != null) {
+            user.setLogin(userUpdate.login());
+        }
+        if (userUpdate.password() != null) {
+            user.setPassword(userUpdate.password());
+        }
         return userMapper.mapToUserDTO(userRepository.save(user));
     }
 
