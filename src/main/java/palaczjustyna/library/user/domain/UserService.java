@@ -24,7 +24,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
-    public UserDTO updateUser(UserUpdateDTO userUpdate) {
+    public UserDTO updateUser(UserDTO userUpdate) {
         Optional<User> userOpt = userRepository.findById(userUpdate.id());
         if (userOpt.isEmpty()) {
             throw new IllegalArgumentException("The user with id = " +  userUpdate.id() + " was not found" );
@@ -39,13 +39,22 @@ public class UserService {
         if (userUpdate.dateOfBirth() != null) {
             user.setDateOfBirth(userUpdate.dateOfBirth());
         }
-        if (userUpdate.login() != null) {
-            user.setLogin(userUpdate.login());
-        }
         if (userUpdate.password() != null) {
             user.setPassword(userUpdate.password());
         }
         return userMapper.mapToUserDTO(userRepository.save(user));
     }
 
+    public User addUser(UserDTO userDTO) {
+        return userRepository.save(new User(userDTO.firstName(), userDTO.lastName(), userDTO.dateOfBirth(), userDTO.login(), userDTO.password()));
+    }
+
+    public void deleteUser(Integer id) {
+        userRepository.deleteById(id);
+    }
+
+    public List<UserDTO> getUserByLastNameLike(String lastName) {
+        List <User> resultList = userRepository.findByLastNameLike("%"+lastName+ "%");
+        return userMapper.mapToUserListDTO(resultList);
+    }
 }

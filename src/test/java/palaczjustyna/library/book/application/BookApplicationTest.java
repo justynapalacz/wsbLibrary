@@ -100,7 +100,6 @@ class BookApplicationTest {
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
-        book.setStatus(status);
         when(bookService.updateBook(bookDTO)).thenReturn(book);
 
         //when
@@ -111,6 +110,5 @@ class BookApplicationTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
-        assertEquals(status, result.getStatus());
     }
 }

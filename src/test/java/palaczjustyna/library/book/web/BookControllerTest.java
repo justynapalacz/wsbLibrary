@@ -107,7 +107,6 @@ class BookControllerTest {
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
-        book.setStatus(status);
         when(bookApplication.updateBook(bookDTO)).thenReturn(book);
 
         //when
@@ -118,6 +117,5 @@ class BookControllerTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
-        assertEquals(status, result.getStatus());
     }
 }

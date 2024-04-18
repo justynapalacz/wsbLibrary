@@ -45,8 +45,8 @@ public class SecurityConfig {
 
         List<UserDTO>  userDTOList = userApplication.getAllUsers();
         userDTOList.forEach(userDTO -> {
-            UserDetails reader = User.withUsername(userDTO.getLogin())
-                    .password(encoder.encode(userDTO.getPassword()))
+            UserDetails reader = User.withUsername(userDTO.login())
+                    .password(encoder.encode(userDTO.password()))
                     .roles("READER")
                     .build();
             readers.add(reader);

@@ -40,10 +40,27 @@ public class BorrowService {
         return borrowMapper.mapToBarrowDTO(borrow.get()) ;
     }
 
-    public void addBorrow(BorrowCreateDTO borrowCreateDTO) {
+    public String addBorrow(BorrowCreateDTO borrowCreateDTO) {
         User user = userApplication.findById(borrowCreateDTO.userId());
         Book book = bookApplication.findById(borrowCreateDTO.bookId());
+        if(book.getStatus().equals(false)){
+            return "Book already borrowed. Please select another book.";
+        }
         bookApplication.updateBook(new BookUpdateDTO(book.getId(), null, null, false));
         borrowRepository.save(new Borrow(user,book,LocalDateTime.now()));
+        return "Successfully created borrow";
+    }
+
+    public String updateBorrowAndReturnBook(Integer borrowId) {
+       Borrow borrow = borrowRepository.findById(borrowId).orElseThrow();
+       if(borrow.getDateOfReturn() != null) {
+           return "Book already returned. Please select another borrowId.";
+       }
+       Book bookToReturn = borrow.getBook();
+       bookApplication.returnBook(bookToReturn);
+       borrow.setDateOfReturn(LocalDateTime.now());
+       borrowRepository.save(borrow);
+
+       return "Successfully return";
     }
 }

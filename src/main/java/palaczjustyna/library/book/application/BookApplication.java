@@ -35,4 +35,8 @@ public class BookApplication {
     public BookDTO updateBook(BookUpdateDTO book) {
         return bookService.updateBook(book);
     }
+
+    public void returnBook (Book book){
+        bookService.returnBook(book);
+    }
 }

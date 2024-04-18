@@ -30,8 +30,12 @@ public class BorrowController {
     @PostMapping("/addBorrow")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     String addBorrow(@RequestBody BorrowCreateDTO borrowCreateDTO){
-        borrowApplication.addBorrow(borrowCreateDTO);
-        return "Successfully created barrow";
+        return  borrowApplication.addBorrow(borrowCreateDTO);
+    }
+    @PutMapping ("/returnBook")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    String updateBorrowAndReturnBook(@RequestParam(value = "id") Integer borrowId ){
+        return borrowApplication.updateBorrowAndReturnBook(borrowId);
     }
 
 }

@@ -22,7 +22,11 @@ public class BorrowApplication {
         return borrowService.getBorrowsById(id);
     }
 
-    public void addBorrow(BorrowCreateDTO borrowCreateDTO) {
-        borrowService.addBorrow(borrowCreateDTO);
+    public String addBorrow(BorrowCreateDTO borrowCreateDTO) {
+        return borrowService.addBorrow(borrowCreateDTO);
+    }
+
+    public String updateBorrowAndReturnBook(Integer borrowId) {
+        return borrowService.updateBorrowAndReturnBook(borrowId);
     }
 }

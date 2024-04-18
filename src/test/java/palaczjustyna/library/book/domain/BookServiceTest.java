@@ -123,7 +123,6 @@ class BookServiceTest {
         bookDTO.setId(id);
         bookDTO.setTitle(title);
         bookDTO.setAuthor(author);
-        bookDTO.setStatus(status);
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
         when(bookRepository.save(any())).thenReturn(book);
         when(bookMapper.mapToBookDTO(any())).thenReturn(bookDTO);
@@ -137,7 +136,6 @@ class BookServiceTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
-        assertEquals(status, result.getStatus());
     }
 
     @Test

@@ -54,4 +54,9 @@ public class BookService {
     public Book findById(Integer id) {
         return bookRepository.findById(id).orElseThrow();
     }
+
+    public void returnBook(Book book) {
+        book.setStatus(true);
+        bookRepository.save(book);
+    }
 }
