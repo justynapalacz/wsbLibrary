@@ -6,7 +6,8 @@ CREATE TABLE users (
   last_name VARCHAR(100),
   login VARCHAR(100),
   password VARCHAR(100),
-  date_of_birth DATE NOT NULL
+  date_of_birth DATE NOT NULL,
+  email VARCHAR(100)
 );
 
 CREATE TABLE books (
@@ -24,4 +25,15 @@ CREATE TABLE borrow (
   date_of_return DATETIME,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
+CREATE TABLE employees (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR (100),
+  last_name VARCHAR(100),
+  login VARCHAR(100),
+  password VARCHAR(100),
+  date_of_birth DATE NOT NULL,
+  email VARCHAR(100),
+  role VARCHAR(100) NOT NULL
 );

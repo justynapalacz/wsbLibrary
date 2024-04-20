@@ -1,21 +1,19 @@
-package palaczjustyna.library.user.domain;
+package palaczjustyna.library.employee.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import palaczjustyna.library.borrow.domain.Borrow;
+import palaczjustyna.library.security.SecurityRoles;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Setter
 @Getter
-@Table(name = "users")
+@Table(name = "employees")
 @NoArgsConstructor
-public class User {
-
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -39,15 +37,17 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToMany (mappedBy = "user")
-    private List<Borrow> borrowList;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private SecurityRoles role;
 
-    public User(String firstName, String lastName, LocalDate dateOfBirth, String login, String password, String email) {
+    public Employee(String firstName, String lastName, LocalDate dateOfBirth, String login, String password, String email, SecurityRoles role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.login = login;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 }

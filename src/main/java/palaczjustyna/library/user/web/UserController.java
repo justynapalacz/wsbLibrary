@@ -21,7 +21,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     List<UserDTO> getAllUsers() {
         log.info("Search all users");
-
         return userApplication.getAllUsers();
     }
 

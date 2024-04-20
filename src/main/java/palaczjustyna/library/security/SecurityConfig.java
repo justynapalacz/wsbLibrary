@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import palaczjustyna.library.employee.application.EmployeeApplication;
+import palaczjustyna.library.employee.domain.Employee;
 import palaczjustyna.library.user.application.UserApplication;
 import palaczjustyna.library.user.domain.UserDTO;
 
@@ -28,31 +30,42 @@ public class SecurityConfig {
 
     @Autowired
     private UserApplication userApplication;
+
+    @Autowired
+    private EmployeeApplication employeeApplication;
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        List<UserDetails> readers = new ArrayList<>();
-        UserDetails admin = User.withUsername("Justyna")
-                .password(encoder.encode("Justyna"))
-                .roles("ADMIN", "LIBRARIAN", "READER")
-                .build();
-        readers.add(admin);
+        List<UserDetails> users = new ArrayList<>();
 
-        UserDetails librarian = User.withUsername("Marcin")
-                .password(encoder.encode("Marcin"))
-                .roles("LIBRARIAN", "READER")
-                .build();
-        readers.add(librarian);
+        List<Employee> adminList = employeeApplication.findEmployeeByRole(SecurityRoles.ADMIN);
+        adminList.forEach(admin->{
+            UserDetails adminRole = User.withUsername(admin.getLogin())
+                    .password(encoder.encode(admin.getPassword()))
+                    .roles(SecurityRoles.ADMIN.toString())
+                    .build();
+            users.add(adminRole);
+        });
+
+        List<Employee> librarianList = employeeApplication.findEmployeeByRole(SecurityRoles.LIBRARIAN);
+        librarianList.forEach(librarian->{
+            UserDetails librarianRole = User.withUsername(librarian.getLogin())
+                    .password(encoder.encode(librarian.getPassword()))
+                    .roles(SecurityRoles.LIBRARIAN.toString())
+                    .build();
+            users.add(librarianRole);
+        });
 
         List<UserDTO>  userDTOList = userApplication.getAllUsers();
         userDTOList.forEach(userDTO -> {
             UserDetails reader = User.withUsername(userDTO.login())
                     .password(encoder.encode(userDTO.password()))
-                    .roles("READER")
+                    .roles(SecurityRoles.READER.toString())
                     .build();
-            readers.add(reader);
+            users.add(reader);
         });
 
-        return new InMemoryUserDetailsManager(readers);
+        return new InMemoryUserDetailsManager(users);
     }
 
     @Bean

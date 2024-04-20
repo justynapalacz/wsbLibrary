@@ -29,4 +29,8 @@ public class BorrowApplication {
     public String updateBorrowAndReturnBook(Integer borrowId) {
         return borrowService.updateBorrowAndReturnBook(borrowId);
     }
+
+    public String chargePenalty(Integer borrowId) {
+        return borrowService.chargePenalty(borrowId);
+    }
 }

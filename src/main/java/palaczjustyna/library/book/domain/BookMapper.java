@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface BookMapper {
 
-    @Mapping(target = "status", expression = "java(mapToBookStatus(book.getStatus()))")
+  @Mapping(target = "status", expression = "java(mapToBookStatus(book.getStatus()))")
     BookDTO mapToBookDTO (Book book);
 
     List<BookDTO> mapToBookListDTO (List<Book> book);

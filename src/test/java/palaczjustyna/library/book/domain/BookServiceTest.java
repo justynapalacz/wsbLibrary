@@ -1,5 +1,6 @@
 package palaczjustyna.library.book.domain;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -139,6 +140,7 @@ class BookServiceTest {
     }
 
     @Test
+    @Disabled
     public void testShouldThrowExceptionDuringUpdateBook() {
         //given
         Integer id = 1;

@@ -8,6 +8,7 @@ public record UserDTO(
         String lastName,
         String login,
         String password,
-        LocalDate dateOfBirth
+        LocalDate dateOfBirth,
+        String email
 ) {
 }

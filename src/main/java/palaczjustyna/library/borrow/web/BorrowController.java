@@ -1,15 +1,11 @@
 package palaczjustyna.library.borrow.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import palaczjustyna.library.borrow.application.BorrowApplication;
 import palaczjustyna.library.borrow.domain.BorrowCreateDTO;
 import palaczjustyna.library.borrow.domain.BorrowDTO;
-import palaczjustyna.library.borrow.domain.BorrowNotFoundException;
 
 import java.util.List;
 
@@ -40,5 +36,10 @@ public class BorrowController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     String updateBorrowAndReturnBook(@RequestParam(value = "id") Integer borrowId ){
         return borrowApplication.updateBorrowAndReturnBook(borrowId);
+    }
+    @GetMapping("/checkPenalty")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    String chargePenalty (@RequestParam(value = "id") Integer borrowId){
+        return borrowApplication.chargePenalty(borrowId);
     }
 }

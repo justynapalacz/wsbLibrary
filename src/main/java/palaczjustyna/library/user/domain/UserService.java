@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import palaczjustyna.library.user.infrastructure.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -38,11 +37,15 @@ public class UserService {
         if (userUpdate.password() != null) {
             user.setPassword(userUpdate.password());
         }
+        if (userUpdate.email() != null) {
+            user.setEmail(userUpdate.email());
+        }
         return userMapper.mapToUserDTO(userRepository.save(user));
     }
 
     public User addUser(UserDTO userDTO) {
-        return userRepository.save(new User(userDTO.firstName(), userDTO.lastName(), userDTO.dateOfBirth(), userDTO.login(), userDTO.password()));
+
+        return userRepository.save(new User(userDTO.firstName(), userDTO.lastName(), userDTO.dateOfBirth(), userDTO.login(), userDTO.password(), userDTO.email()));
     }
 
     public void deleteUser(Integer id) {

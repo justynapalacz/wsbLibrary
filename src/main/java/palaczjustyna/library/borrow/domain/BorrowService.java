@@ -10,8 +10,8 @@ import palaczjustyna.library.user.application.UserApplication;
 import palaczjustyna.library.user.domain.User;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BorrowService {
@@ -62,5 +62,19 @@ public class BorrowService {
        borrowRepository.save(borrow);
 
        return "Successfully return";
+    }
+
+    public String chargePenalty(Integer borrowId) {
+        double penalty;
+        Borrow borrow = this.getBorrowsById(borrowId);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime firstDate = borrow.getDateOfBorrow();
+        long diff = ChronoUnit.DAYS.between(firstDate, now);
+        if (diff > 30) {
+            penalty = (diff - 30) * 0.20;
+            return "Cash penalty: " + penalty;
+        } else {
+            return "The book was returned on time";
+        }
     }
 }
