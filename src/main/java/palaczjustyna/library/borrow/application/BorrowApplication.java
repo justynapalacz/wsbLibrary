@@ -19,7 +19,7 @@ public class BorrowApplication {
     }
 
     public BorrowDTO getBorrowsById(Integer id) {
-        return borrowService.getBorrowsById(id);
+        return borrowService.getBorrowsDTOById(id);
     }
 
     public String addBorrow(BorrowCreateDTO borrowCreateDTO) {

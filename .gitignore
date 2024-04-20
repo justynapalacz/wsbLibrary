@@ -34,3 +34,5 @@ replay_pid*
 /mvnw
 /mvnw.bat
 mvnw.cmd
+
+*.log*

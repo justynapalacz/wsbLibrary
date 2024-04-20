@@ -32,18 +32,18 @@ public class BorrowService {
         return ((List<Borrow>) borrowRepository.findAll()).stream().map(barrow -> borrowMapper.mapToBarrowDTO(barrow)).toList();
     }
 
-    public BorrowDTO getBorrowsById(Integer id) {
-        Optional<Borrow> borrow = borrowRepository.findById(id);
-        if (borrow.isEmpty()) {
-            throw new IllegalArgumentException("The borrow with id = " + id + " is not exist" );
-        }
-        return borrowMapper.mapToBarrowDTO(borrow.get()) ;
+    public BorrowDTO getBorrowsDTOById(Integer id) {
+        return borrowMapper.mapToBarrowDTO(this.getBorrowsById(id)) ;
+    }
+
+    public Borrow getBorrowsById(Integer id) {
+        return  borrowRepository.findById(id).orElseThrow(()-> new BorrowNotFoundException("The borrow with id = " + id + " is not exist" ));
     }
 
     public String addBorrow(BorrowCreateDTO borrowCreateDTO) {
         User user = userApplication.findById(borrowCreateDTO.userId());
         Book book = bookApplication.findById(borrowCreateDTO.bookId());
-        if(book.getStatus().equals(false)){
+        if(book.getStatus().equals(false)) {
             return "Book already borrowed. Please select another book.";
         }
         bookApplication.updateBook(new BookUpdateDTO(book.getId(), null, null, false));
@@ -52,7 +52,7 @@ public class BorrowService {
     }
 
     public String updateBorrowAndReturnBook(Integer borrowId) {
-       Borrow borrow = borrowRepository.findById(borrowId).orElseThrow();
+       Borrow borrow = this.getBorrowsById(borrowId);
        if(borrow.getDateOfReturn() != null) {
            return "Book already returned. Please select another borrowId.";
        }

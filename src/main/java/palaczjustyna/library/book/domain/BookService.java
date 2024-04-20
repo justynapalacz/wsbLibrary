@@ -34,11 +34,7 @@ public class BookService {
     }
 
     public BookDTO updateBook(BookUpdateDTO bookUpdate) {
-        Optional<Book> bookOpt = bookRepository.findById(bookUpdate.id());
-        if (bookOpt.isEmpty()) {
-            throw new IllegalArgumentException("The book with id = " +  bookUpdate.id() + " was not found" );
-        }
-        Book book = bookOpt.get();
+        Book book = this.findById(bookUpdate.id());
         if (bookUpdate.author() != null) {
             book.setAuthor(bookUpdate.author());
         }
@@ -52,7 +48,7 @@ public class BookService {
     }
 
     public Book findById(Integer id) {
-        return bookRepository.findById(id).orElseThrow();
+        return bookRepository.findById(id).orElseThrow( () -> new BookNotFoundException("Book not found for id: "+id));
     }
 
     public void returnBook(Book book) {

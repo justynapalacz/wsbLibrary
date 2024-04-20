@@ -21,15 +21,11 @@ public class UserService {
     }
 
     public User findById(Integer id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found for id: "+id));
     }
 
     public UserDTO updateUser(UserDTO userUpdate) {
-        Optional<User> userOpt = userRepository.findById(userUpdate.id());
-        if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("The user with id = " +  userUpdate.id() + " was not found" );
-        }
-        User user = userOpt.get();
+        User user = this.findById(userUpdate.id());
         if (userUpdate.firstName() != null) {
             user.setFirstName(userUpdate.firstName());
         }
