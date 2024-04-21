@@ -33,4 +33,8 @@ public class BorrowApplication {
     public String chargePenalty(Integer borrowId) {
         return borrowService.chargePenalty(borrowId);
     }
+
+    public List<BorrowDTO> sendEmail() {
+        return borrowService.sendEmail();
+    }
 }

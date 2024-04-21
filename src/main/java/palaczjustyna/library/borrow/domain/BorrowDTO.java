@@ -13,6 +13,8 @@ public class BorrowDTO {
     private LocalDateTime dateOfBorrow;
     private LocalDateTime dateOfReturn;
     private String bookTitle;
+    private String bookAuthor;
     private String firstNameUser;
     private String lastNameUser;
+    private String emailUser;
 }

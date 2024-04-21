@@ -1,6 +1,7 @@
 package palaczjustyna.library.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -34,15 +35,26 @@ public class SecurityConfig {
     @Autowired
     private EmployeeApplication employeeApplication;
 
+    @Value("${admin.name}")
+    private String adminName;
+
+    @Value("${admin.password}")
+    private String adminPassword;
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         List<UserDetails> users = new ArrayList<>();
+
+        UserDetails superAdmin = User.withUsername(adminName)
+                .password(encoder.encode(adminPassword))
+                .roles(getAdminRoles())
+                .build();
+        users.add(superAdmin);
 
         List<Employee> adminList = employeeApplication.findEmployeeByRole(SecurityRoles.ADMIN);
         adminList.forEach(admin->{
             UserDetails adminRole = User.withUsername(admin.getLogin())
                     .password(encoder.encode(admin.getPassword()))
-                    .roles(SecurityRoles.ADMIN.toString())
+                    .roles(getAdminRoles())
                     .build();
             users.add(adminRole);
         });
@@ -51,7 +63,7 @@ public class SecurityConfig {
         librarianList.forEach(librarian->{
             UserDetails librarianRole = User.withUsername(librarian.getLogin())
                     .password(encoder.encode(librarian.getPassword()))
-                    .roles(SecurityRoles.LIBRARIAN.toString())
+                    .roles(getLibrarianRoles())
                     .build();
             users.add(librarianRole);
         });
@@ -60,7 +72,7 @@ public class SecurityConfig {
         userDTOList.forEach(userDTO -> {
             UserDetails reader = User.withUsername(userDTO.login())
                     .password(encoder.encode(userDTO.password()))
-                    .roles(SecurityRoles.READER.toString())
+                    .roles(getReaderRoles())
                     .build();
             users.add(reader);
         });
@@ -82,5 +94,17 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private String[] getAdminRoles(){
+        return new String[]{SecurityRoles.ADMIN.toString(), SecurityRoles.LIBRARIAN.toString(), SecurityRoles.READER.toString()};
+    }
+
+    private String[] getLibrarianRoles(){
+        return new String[]{SecurityRoles.LIBRARIAN.toString(), SecurityRoles.READER.toString()};
+    }
+
+    private String[] getReaderRoles(){
+        return new String[]{SecurityRoles.READER.toString()};
     }
 }

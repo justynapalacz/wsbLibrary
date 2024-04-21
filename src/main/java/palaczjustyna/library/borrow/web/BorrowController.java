@@ -42,4 +42,9 @@ public class BorrowController {
     String chargePenalty (@RequestParam(value = "id") Integer borrowId){
         return borrowApplication.chargePenalty(borrowId);
     }
+    @GetMapping("/sendEmail")
+    @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    List<BorrowDTO> sendEmail (){
+        return borrowApplication.sendEmail();
+    }
 }

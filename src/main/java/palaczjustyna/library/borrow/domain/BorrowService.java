@@ -1,19 +1,24 @@
 package palaczjustyna.library.borrow.domain;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.book.application.BookApplication;
 import palaczjustyna.library.book.domain.Book;
 import palaczjustyna.library.book.domain.BookUpdateDTO;
 import palaczjustyna.library.borrow.infrastructure.BorrowRepository;
+import palaczjustyna.library.email.application.EmailApplication;
 import palaczjustyna.library.user.application.UserApplication;
 import palaczjustyna.library.user.domain.User;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BorrowService {
 
     @Autowired
@@ -26,7 +31,17 @@ public class BorrowService {
     private BookApplication bookApplication;
 
     @Autowired
+    private EmailApplication emailApplication;
+
+    @Autowired
     private BorrowMapper borrowMapper;
+
+    @Value("${penalty.rate}")
+    private double penaltyRate;
+    @Value("${allowed.number.of.days}")
+    private int allowedDays;
+    @Value("${mail.from}")
+    private String mailFrom;
 
     public List<BorrowDTO> getAllBorrows() {
         return ((List<Borrow>) borrowRepository.findAll()).stream().map(barrow -> borrowMapper.mapToBarrowDTO(barrow)).toList();
@@ -60,21 +75,44 @@ public class BorrowService {
        bookApplication.returnBook(bookToReturn);
        borrow.setDateOfReturn(LocalDateTime.now());
        borrowRepository.save(borrow);
-
        return "Successfully return";
     }
 
     public String chargePenalty(Integer borrowId) {
         double penalty;
         Borrow borrow = this.getBorrowsById(borrowId);
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime firstDate = borrow.getDateOfBorrow();
-        long diff = ChronoUnit.DAYS.between(firstDate, now);
-        if (diff > 30) {
-            penalty = (diff - 30) * 0.20;
-            return "Cash penalty: " + penalty;
+        if (borrow.getDateOfReturn() != null) {
+            return "The book was returned.";
         } else {
-            return "The book was returned on time";
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime firstDate = borrow.getDateOfBorrow();
+            long diff = ChronoUnit.DAYS.between(firstDate, now);
+            if (diff > allowedDays) {
+                penalty = (diff - allowedDays) * penaltyRate;
+                return "Cash penalty: " + penalty;
+            } else {
+                return "The book is returned on time";
+            }
         }
     }
+
+    public List<BorrowDTO> sendEmail() {
+        List<BorrowDTO> list = getAllBorrows();
+        list = list.stream()
+                .filter(borrowDTO -> borrowDTO.getDateOfReturn() == null)
+                .filter(borrowDTO -> ChronoUnit.DAYS.between(borrowDTO.getDateOfBorrow(), LocalDateTime.now()) > allowedDays)
+                .collect(Collectors.toList());
+
+        list.forEach(borrowDTO -> {
+            String from = mailFrom;
+            String to =  borrowDTO.getEmailUser();
+            String title = "Return library books reminder";
+            String body =  "Dear " + borrowDTO.getFirstNameUser() + " " + borrowDTO.getLastNameUser()
+                    + "+/n We kindly inform you that the deadline for returning the book "
+                    + borrowDTO.getBookTitle() + " by " + borrowDTO.getBookAuthor() + " has passed.";
+            emailApplication.sendEmailToUser(from, to, title, body);
+        });
+        return list;
+    }
+
 }
