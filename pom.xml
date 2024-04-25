@@ -46,6 +46,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.6.0.Beta1</version>
@@ -103,7 +108,7 @@
 				<configuration>
 					<changeLogFile>liquibase/changelog-master.xml</changeLogFile>
 					<url>${dbUrl}</url>
-					<driver>com.mysql.cj.jdbc.Driver</driver>
+					<driver>${dbDriver}</driver>
 					<username>${dbUser}</username>
 					<password>${dbPwd}</password>
 					<dropFirst>${dropFirst}</dropFirst>
