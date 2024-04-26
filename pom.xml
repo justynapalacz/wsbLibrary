@@ -18,7 +18,7 @@
 		<dbUrl>jdbc:mysql://localhost:3306/library</dbUrl>
 		<dbUser>root</dbUser>
 		<dbPwd>root</dbPwd>
-		<dropFirst>false</dropFirst>
+		<dropFirst>true</dropFirst>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -112,7 +112,7 @@
 				<configuration>
 					<changeLogFile>liquibase/changelog-master.xml</changeLogFile>
 					<url>${dbUrl}</url>
-					<driver>${dbDriver}</driver>
+					<driver>com.mysql.cj.jdbc.Driver</driver>
 					<username>${dbUser}</username>
 					<password>${dbPwd}</password>
 					<dropFirst>${dropFirst}</dropFirst>
