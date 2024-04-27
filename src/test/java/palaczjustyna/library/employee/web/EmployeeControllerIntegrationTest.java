@@ -1,31 +1,27 @@
 package palaczjustyna.library.employee.web;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import palaczjustyna.library.AbstractIntegrationTest;
 import palaczjustyna.library.employee.domain.Employee;
 import palaczjustyna.library.employee.domain.EmployeeDTO;
 import palaczjustyna.library.security.SecurityRoles;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void shouldReturnEmployeeList() {
         //given
-        restTemplate = restTemplate.withBasicAuth("root", "root");
-
         //when
-        var result = this.restTemplate.getForObject("http://localhost:" + port + "/getEmployees",
-                Employee[].class);
+        var result = getAllEmployee();
 
         //then
         assertNotNull(result);
@@ -35,21 +31,18 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
     @Test
     void shouldAddEmployee() {
         //given
-        restTemplate = restTemplate.withBasicAuth("root", "root");
-
         EmployeeDTO employeeDTO = new EmployeeDTO(null, "Jan", "Kowalski", LocalDate.of(2000, 2, 4),
                 "kowalski", "kowalski", "kowalski@gmail.com", SecurityRoles.READER);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EmployeeDTO> requestEntity =
-                new HttpEntity<>(employeeDTO, headers);
-
         //when
-        var result = this.restTemplate.postForObject("http://localhost:" + port + "/addEmployee", requestEntity,
-                Employee.class);
+        var result = WebClient.create("http://localhost:" + port )
+                .method(HttpMethod.POST)
+                .uri(builder -> builder.path("/addEmployee").build())
+                .headers(headers -> headers.setBasicAuth("root", "root"))
+                .body(BodyInserters.fromValue(employeeDTO))
+                .retrieve()
+                .bodyToMono(Employee.class)
+                .block();
 
         //then
         assertNotNull(result);
@@ -58,53 +51,59 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
     @Test
     void shouldDeleteEmployee() {
         //given
-        restTemplate = restTemplate.withBasicAuth("root", "root");
-        var employeeBeforeDelete = this.restTemplate.getForObject("http://localhost:" + port + "/getEmployees",
-                Employee[].class);
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/deleteEmployee")
-                .queryParam("id", employeeBeforeDelete[0].getId());
+        var employeeBeforeDelete = getAllEmployee();
 
         //when
-        this.restTemplate.delete(builder.toUriString());
+        var result = WebClient.create("http://localhost:" + port )
+                .method(HttpMethod.DELETE)
+                .uri(builder -> builder.path("/deleteEmployee").queryParam("id", employeeBeforeDelete[0].getId()).build())
+                .headers(headers -> headers.setBasicAuth("root", "root"))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
         //then
-        var employeeAfterDelete = this.restTemplate.getForObject("http://localhost:" + port + "/getEmployees",
-                Employee[].class);
+        var employeeAfterDelete = getAllEmployee();
 
         assertEquals(employeeBeforeDelete.length - 1, employeeAfterDelete.length);
+        assertEquals( "Employee by id " + employeeBeforeDelete[0].getId() + " is deleted", result);
     }
 
     @Test
     void shouldUpdateEmployee() {
         //given
-        restTemplate = restTemplate.withBasicAuth("root", "root");
         var newFirsName = "TestKowalski";
-        var employees = this.restTemplate.getForObject("http://localhost:" + port + "/getEmployees",
-                Employee[].class);
+        var employees = getAllEmployee();
         var employeeIdToUpdate = employees[0].getId();
 
         EmployeeDTO employeeDTO = new EmployeeDTO(employeeIdToUpdate, newFirsName, null, null,
                 null, null, null, null);
 
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EmployeeDTO> requestEntity =
-                new HttpEntity<>(employeeDTO, headers);
-
         //when
-        this.restTemplate.put("http://localhost:" + port + "/updateEmployee", requestEntity,
-                Employee.class);
+        var result = WebClient.create("http://localhost:" + port )
+                .method(HttpMethod.PUT)
+                .uri(builder -> builder.path("/updateEmployee").build())
+                .headers(headers -> headers.setBasicAuth("root", "root"))
+                .body(BodyInserters.fromValue(employeeDTO))
+                .retrieve()
+                .bodyToMono(Employee.class)
+                .block();
 
         //then
-        var employeesAfterUpdate = this.restTemplate.getForObject("http://localhost:" + port + "/getEmployees",
-                Employee[].class);
+        var employeesAfterUpdate = getAllEmployee();
 
         assertNotNull(employeesAfterUpdate);
         assertEquals(employeeIdToUpdate, employeesAfterUpdate[0].getId());
         assertEquals(newFirsName, employeesAfterUpdate[0].getFirstName());
+    }
+
+    private Employee[] getAllEmployee() {
+        return WebClient.create("http://localhost:" + port)
+                .method(HttpMethod.GET)
+                .uri(builder -> builder.path("/getEmployees").build())
+                .headers(headers -> headers.setBasicAuth("root", "root"))
+                .retrieve()
+                .bodyToMono(Employee[].class)
+                .block();
     }
 }

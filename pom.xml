@@ -18,7 +18,7 @@
 		<dbUrl>jdbc:mysql://localhost:3306/library</dbUrl>
 		<dbUser>root</dbUser>
 		<dbPwd>root</dbPwd>
-		<dropFirst>true</dropFirst>
+		<dropFirst>false</dropFirst>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -71,6 +71,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
