@@ -52,7 +52,7 @@ public class BorrowService {
     }
 
     public Borrow getBorrowsById(Integer id) {
-        return  borrowRepository.findById(id).orElseThrow(()-> new BorrowNotFoundException("The borrow with id = " + id + " is not exist" ));
+        return  borrowRepository.findById(id).orElseThrow(()-> new BorrowNotFoundException("The borrow with id = " + id + " is not exist." ));
     }
 
     public String addBorrow(BorrowCreateDTO borrowCreateDTO) {

@@ -47,7 +47,7 @@ public class BookService {
     }
 
     public Book findById(Integer id) {
-        return bookRepository.findById(id).orElseThrow( () -> new BookNotFoundException("Book not found for id: "+id));
+        return bookRepository.findById(id).orElseThrow( () -> new BookNotFoundException("The book with id = "+ id + " was not found."));
     }
 
     public void returnBook(Book book) {

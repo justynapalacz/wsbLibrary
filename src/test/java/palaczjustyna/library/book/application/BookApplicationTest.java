@@ -10,7 +10,8 @@ import palaczjustyna.library.book.domain.*;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,6 +87,41 @@ class BookApplicationTest {
 
         //then
         verify(bookService, times(1)).deleteBook(id);
+    }
+
+    @Test
+    public void testFindBookById(){
+        //given
+        Integer id = 1;
+        String title = "Pan Tadeusz";
+        String author = "Adam Mickiewicz";
+        Book book = new Book();
+        book.setId(id);
+        book.setTitle(title);
+        book.setAuthor(author);
+        when(bookService.findById(id)).thenReturn(book);
+
+        //when
+        var result = bookApplication.findById(id);
+
+        //then
+        verify(bookService, times(1)).findById(id);
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals(title, result.getTitle());
+        assertEquals(author, result.getAuthor());
+    }
+
+    @Test
+    public void testReturnBook(){
+        //given
+        Book book = new Book();
+
+        //when
+        bookApplication.returnBook(book);
+
+        //then
+        verify(bookService, times(1)).returnBook(book);
     }
 
     @Test

@@ -1,12 +1,12 @@
 package palaczjustyna.library.book.domain;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import palaczjustyna.library.book.infrastructure.BookRepository;
+import palaczjustyna.library.borrow.domain.Borrow;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -78,10 +77,14 @@ class BookServiceTest {
         String title = "Proces";
         String author = "Franz Kafka";
         BookCreateDTO bookDTO = new BookCreateDTO(title, author);
+        Integer boorowId = 100;
+        Borrow borrow = new Borrow();
+        borrow.setId(boorowId);
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
+        book.setBorrowList(List.of(borrow));
         when(bookRepository.save(any())).thenReturn(book);
 
         //when
@@ -92,6 +95,7 @@ class BookServiceTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
+        assertEquals(boorowId, result.getBorrowList().get(0).getId());
     }
 
     @Test
@@ -140,7 +144,6 @@ class BookServiceTest {
     }
 
     @Test
-    @Disabled
     public void testShouldThrowExceptionDuringUpdateBook() {
         //given
         Integer id = 1;
@@ -150,10 +153,23 @@ class BookServiceTest {
         BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, status);
 
         //when
-        var exception = assertThrows(IllegalArgumentException.class, () -> bookService.updateBook(bookDTO));
+        var exception = assertThrows(BookNotFoundException.class, () -> bookService.updateBook(bookDTO));
 
         //then
-        assertEquals("The book with id = " + id + " was not found", exception.getMessage());
+        assertEquals("The book with id = " + id + " was not found.", exception.getMessage());
     }
+
+    @Test
+    public void testShouldReturnBook() {
+        //given
+        Book book = new Book();
+
+        //when
+        bookService.returnBook(book);
+
+        //then
+        verify(bookRepository, times(1)).save(book);
+    }
+
 
 }
