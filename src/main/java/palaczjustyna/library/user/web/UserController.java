@@ -2,6 +2,7 @@ package palaczjustyna.library.user.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import palaczjustyna.library.user.application.UserApplication;
@@ -19,6 +20,7 @@ public class UserController {
 
     @GetMapping("/getUsers")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    @ResponseStatus(HttpStatus.OK)
     List<UserDTO> getAllUsers() {
         log.info("Search all users");
         return userApplication.getAllUsers();
@@ -26,18 +28,21 @@ public class UserController {
 
     @PutMapping("/updateUser")
     @PreAuthorize("hasAuthority('ROLE_READER')")
+    @ResponseStatus(HttpStatus.OK)
     UserDTO updateUser(@RequestBody UserDTO user){
         return userApplication.updateUser(user);
     }
 
     @PostMapping("/addUser")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    @ResponseStatus(HttpStatus.CREATED)
     User addUser(@RequestBody UserDTO userDTO){
         return userApplication.addUser(userDTO);
     }
 
     @DeleteMapping("/deleteUser")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteUser (@RequestParam(value = "id")  Integer id){
         log.info("Delete user id : {}", id);
         userApplication.deleteUser(id);
@@ -45,6 +50,7 @@ public class UserController {
 
     @GetMapping("/getUserByLastName")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
+    @ResponseStatus(HttpStatus.OK)
     List<UserDTO> getUserByLastNameLike(@RequestParam(value = "lastName")  String lastName){
         return userApplication.getUserByLastNameLike(lastName);
     }
