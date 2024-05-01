@@ -54,7 +54,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         var employeeBeforeDelete = getAllEmployee();
 
         //when
-        var result = WebClient.create("http://localhost:" + port )
+        WebClient.create("http://localhost:" + port )
                 .method(HttpMethod.DELETE)
                 .uri(builder -> builder.path("/deleteEmployee").queryParam("id", employeeBeforeDelete[0].getId()).build())
                 .headers(headers -> headers.setBasicAuth("root", "root"))
@@ -66,7 +66,6 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         var employeeAfterDelete = getAllEmployee();
 
         assertEquals(employeeBeforeDelete.length - 1, employeeAfterDelete.length);
-        assertEquals( "Employee by id " + employeeBeforeDelete[0].getId() + " is deleted", result);
     }
 
     @Test

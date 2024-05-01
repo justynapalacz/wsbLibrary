@@ -21,9 +21,8 @@ public class EmployeeService {
                 employeeDTO.login(), employeeDTO.password(), employeeDTO.email(), employeeDTO.role()));
     }
 
-    public String deleteEmployee(Integer id) {
+    public void deleteEmployee(Integer id) {
         employeeRepository.deleteById(id);
-        return "Employee by id " + id + " is deleted";
     }
     private Employee findById(Integer id) {
         return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee not found for id: "+id));

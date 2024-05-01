@@ -22,8 +22,8 @@ public class EmployeeApplication {
         return employeeService.addEmployee(employeeDTO);
     }
 
-    public String deleteEmployee(Integer id) {
-       return employeeService.deleteEmployee(id);
+    public void deleteEmployee(Integer id) {
+       employeeService.deleteEmployee(id);
     }
 
     public Employee updateEmployee(EmployeeDTO employeeDTO) {

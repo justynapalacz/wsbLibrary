@@ -33,8 +33,8 @@ public class EmployeeController {
     @DeleteMapping("/deleteEmployee")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public String deleteEmployee (@RequestParam(value = "id")  Integer id){
-        return employeeApplication.deleteEmployee(id);
+     public void deleteEmployee (@RequestParam(value = "id")  Integer id){
+        employeeApplication.deleteEmployee(id);
     }
 
     @PutMapping("/updateEmployee")
