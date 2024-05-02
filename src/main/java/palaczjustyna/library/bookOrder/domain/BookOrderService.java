@@ -10,27 +10,28 @@ import palaczjustyna.library.book.domain.BookDTO;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 @Service
 @Slf4j
 public class BookOrderService {
 
-    @Value("${warehouse.url}")
-    private String warehouseURL;
-
     @Value("${library.clientId.warehouse}")
     private Integer clientId;
 
-    public String createBookOrder(String bookTitle, Integer quantity) {
-        Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookTitle);
+    @Autowired
+    private WebClient webClient;
+
+    public String createBookOrder(BookToOrderDTO bookToOrderDTO) {
+        Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookToOrderDTO.bookTitle());
         Integer bookSummaryId = createBookSummary();
-        Integer bookOrderId = addBookOrderToSummary(quantity, bookSummaryId, bookIdInBookWarehouse);
+        Integer bookOrderId = addBookOrderToSummary(bookToOrderDTO.quantity(), bookSummaryId, bookIdInBookWarehouse);
 
         log.info("Book order added to summary. Book order id =" + bookOrderId);
 
         return "New book summary crated. Book summary id: " + bookSummaryId;
     }
     private Integer findBookIdInBookWarehouse(String bookTitle) {
-        BookDTO bookDTO = WebClient.create(this.warehouseURL)
+        BookDTO bookDTO = webClient
                 .method(HttpMethod.GET)
                 .uri(builder -> builder.path("/getBookByTitle").queryParam("bookTitle", bookTitle).build())
                 .header("Accept", "application/json, text/plain, */*")
@@ -44,11 +45,11 @@ public class BookOrderService {
     private Integer createBookSummary() {
         SummaryOrderDTO summaryOrderDTO = new SummaryOrderDTO(null, LocalDateTime.now(), "NEW", "Bank transfer", clientId);
 
-        SummaryOrderDTO result = WebClient.create(this.warehouseURL)
+        SummaryOrderDTO result = webClient
                 .method(HttpMethod.POST)
-                .uri(builder -> builder.path("/addSummary").build())
-                .header("Accept", "application/json, text/plain, */*")
+                .uri("/addSummary")
                 .body(BodyInserters.fromValue(summaryOrderDTO))
+                .header("Accept", "application/json, text/plain, */*")
                 .retrieve()
                 .bodyToMono(SummaryOrderDTO.class)
                 .block();
@@ -59,11 +60,11 @@ public class BookOrderService {
     private Integer addBookOrderToSummary(Integer quantity, Integer bookSummaryId, Integer bookIdInBookWarehouse) {
         SummaryBookDTO summaryBookDTO = new SummaryBookDTO(null, bookSummaryId, bookIdInBookWarehouse, quantity);
 
-        SummaryBookDTO result = WebClient.create(this.warehouseURL)
+        SummaryBookDTO result = webClient
                 .method(HttpMethod.POST)
-                .uri(builder -> builder.path("/addBookOrder").build())
-                .header("Accept", "application/json, text/plain, */*")
+                .uri("/addBookOrder")
                 .body(BodyInserters.fromValue(summaryBookDTO))
+                .header("Accept", "application/json, text/plain, */*")
                 .retrieve()
                 .bodyToMono(SummaryBookDTO.class)
                 .block();

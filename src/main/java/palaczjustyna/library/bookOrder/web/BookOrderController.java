@@ -22,6 +22,6 @@ public class BookOrderController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public String orderBooks(@RequestBody BookToOrderDTO bookOrderDTO) {
-        return bookOrderApplication.createBookOrder(bookOrderDTO.bookTitle(), bookOrderDTO.quantity());
+        return bookOrderApplication.createBookOrder(bookOrderDTO);
     }
 }
