@@ -236,7 +236,7 @@ class BorrowServiceTest {
         //when
         var result = borrowService.sendEmail();
         //then
-        verify(emailApplication, times(1)).sendEmailToUser(any(), any(), any(), any());
+        verify(emailApplication, times(1)).sendEmailToUser(any());
         assertNotNull(result);
         assertThat(result).hasSize(1);
         assertEquals(id, result.get(0).getId());

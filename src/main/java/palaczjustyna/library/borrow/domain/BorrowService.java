@@ -9,6 +9,7 @@ import palaczjustyna.library.book.domain.Book;
 import palaczjustyna.library.book.domain.BookUpdateDTO;
 import palaczjustyna.library.borrow.infrastructure.BorrowRepository;
 import palaczjustyna.library.email.application.EmailApplication;
+import palaczjustyna.library.email.domain.EmailToSendDTO;
 import palaczjustyna.library.user.application.UserApplication;
 import palaczjustyna.library.user.domain.User;
 
@@ -97,22 +98,23 @@ public class BorrowService {
     }
 
     public List<BorrowDTO> sendEmail() {
-        List<BorrowDTO> list = getAllBorrows();
-        list = list.stream()
+        List<BorrowDTO> borrowsAfterTerminToSendEmail = getAllBorrows();
+        borrowsAfterTerminToSendEmail = borrowsAfterTerminToSendEmail.stream()
                 .filter(borrowDTO -> borrowDTO.getDateOfReturn() == null)
                 .filter(borrowDTO -> ChronoUnit.DAYS.between(borrowDTO.getDateOfBorrow(), LocalDateTime.now()) > allowedDays)
                 .collect(Collectors.toList());
 
-        list.forEach(borrowDTO -> {
+        borrowsAfterTerminToSendEmail.forEach(borrowDTO -> {
             String from = mailFrom;
             String to =  borrowDTO.getEmailUser();
-            String title = "Return library books reminder";
+            String subject = "Return library books - reminder";
             String body =  "Dear " + borrowDTO.getFirstNameUser() + " " + borrowDTO.getLastNameUser()
-                    + "+/n We kindly inform you that the deadline for returning the book "
+                    + System.lineSeparator() +"We kindly inform you that the deadline for returning the book "
                     + borrowDTO.getBookTitle() + " by " + borrowDTO.getBookAuthor() + " has passed.";
-            emailApplication.sendEmailToUser(from, to, title, body);
+            EmailToSendDTO emailToSendDTO = new EmailToSendDTO(from, to, subject, body);
+            emailApplication.sendEmailToUser(emailToSendDTO);
         });
-        return list;
+        return borrowsAfterTerminToSendEmail;
     }
 
 }

@@ -1,6 +1,7 @@
 package palaczjustyna.library.bookOrder.domain;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class BookOrderService {
     private Integer clientId;
 
     @Autowired
+    @Qualifier("webClientForBookOrder")
     private WebClient webClient;
 
     public String createBookOrder(BookToOrderDTO bookToOrderDTO) {
