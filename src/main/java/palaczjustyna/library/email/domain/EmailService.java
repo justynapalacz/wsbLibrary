@@ -24,7 +24,7 @@ public class EmailService {
 
         String message = webClient
                 .method(HttpMethod.POST)
-                .uri(builder -> builder.path("/createEmail").build())
+                .uri("/createEmail")
                 .body(BodyInserters.fromValue(emailToSendDTO))
                 .header("Accept", "application/json, text/plain, */*")
                 .retrieve()
