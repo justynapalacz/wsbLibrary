@@ -1,5 +1,6 @@
 package palaczjustyna.library.book.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import palaczjustyna.library.book.domain.BookUpdateDTO;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class BookController {
 
@@ -22,6 +24,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
     List<BookDTO> getAllBooks() {
+        log.info("Search all books");
         return bookApplication.getAllBooks();
     }
 
@@ -29,6 +32,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
     List<BookDTO> getBookByTitle(@RequestParam(value = "title")  String title){
+        log.info("Search book by title. Title: {}" ,title);
         return bookApplication.getBookByTitle(title);
     }
 
@@ -36,6 +40,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
     Book addBook(@RequestBody BookCreateDTO book){
+        log.info("Add book. BookCreateDTO: {}", book);
         return bookApplication.addBook(book);
     }
 
@@ -43,6 +48,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteBook (@RequestParam(value = "id")  Integer id){
+        log.info("Delete book. Book id to delete: {}", id);
         bookApplication.deleteBook(id);
     }
 
@@ -50,6 +56,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
     BookDTO updateBook(@RequestBody BookUpdateDTO book){
+        log.info("Update book. BookUpdateDTO: {}", book);
         return bookApplication.updateBook (book);
     }
 }

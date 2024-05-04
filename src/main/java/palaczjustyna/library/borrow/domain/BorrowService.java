@@ -45,18 +45,22 @@ public class BorrowService {
     private String mailFrom;
 
     public List<BorrowDTO> getAllBorrows() {
+        log.info("Get all borrows");
         return ((List<Borrow>) borrowRepository.findAll()).stream().map(barrow -> borrowMapper.mapToBarrowDTO(barrow)).toList();
     }
 
     public BorrowDTO getBorrowsDTOById(Integer id) {
+        log.info("Get borrow dto by Id. Id : {}", id);
         return borrowMapper.mapToBarrowDTO(this.getBorrowsById(id)) ;
     }
 
     public Borrow getBorrowsById(Integer id) {
+        log.info("Get borrow by Id. Id : {}", id);
         return  borrowRepository.findById(id).orElseThrow(()-> new BorrowNotFoundException("The borrow with id = " + id + " is not exist." ));
     }
 
     public String addBorrow(BorrowCreateDTO borrowCreateDTO) {
+        log.info("Add borrow. BorrowCreateDTO : {}", borrowCreateDTO);
         User user = userApplication.findById(borrowCreateDTO.userId());
         Book book = bookApplication.findById(borrowCreateDTO.bookId());
         if(book.getStatus().equals(false)) {
@@ -68,6 +72,7 @@ public class BorrowService {
     }
 
     public String updateBorrowAndReturnBook(Integer borrowId) {
+        log.info("Update borrow and return book for borrowId : {}", borrowId);
        Borrow borrow = this.getBorrowsById(borrowId);
        if(borrow.getDateOfReturn() != null) {
            return "Book already returned. Please select another borrowId.";
@@ -80,6 +85,7 @@ public class BorrowService {
     }
 
     public String chargePenalty(Integer borrowId) {
+        log.info("Charge penalty for borrowId : {}", borrowId);
         double penalty;
         Borrow borrow = this.getBorrowsById(borrowId);
         if (borrow.getDateOfReturn() != null) {
@@ -98,6 +104,7 @@ public class BorrowService {
     }
 
     public List<BorrowDTO> sendEmail() {
+        log.info("Send emails to users.");
         List<BorrowDTO> borrowsAfterTerminToSendEmail = getAllBorrows();
         borrowsAfterTerminToSendEmail = borrowsAfterTerminToSendEmail.stream()
                 .filter(borrowDTO -> borrowDTO.getDateOfReturn() == null)

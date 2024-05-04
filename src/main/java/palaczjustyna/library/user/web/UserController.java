@@ -30,6 +30,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
     UserDTO updateUser(@RequestBody UserDTO user){
+        log.info("Update User. UserDTO: {}", user);
         return userApplication.updateUser(user);
     }
 
@@ -37,6 +38,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
     User addUser(@RequestBody UserDTO userDTO){
+        log.info("Add User. UserDTO: {}", userDTO);
         return userApplication.addUser(userDTO);
     }
 
@@ -52,7 +54,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
     List<UserDTO> getUserByLastNameLike(@RequestParam(value = "lastName")  String lastName){
+        log.info("Get User by last name. Last name: {}", lastName);
         return userApplication.getUserByLastNameLike(lastName);
     }
-
 }
