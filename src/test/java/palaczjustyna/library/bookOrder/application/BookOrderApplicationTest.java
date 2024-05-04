@@ -8,8 +8,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import palaczjustyna.library.bookOrder.domain.BookOrderService;
 import palaczjustyna.library.bookOrder.domain.BookToOrderDTO;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,10 +31,10 @@ public class BookOrderApplicationTest {
         Integer quantity = 10;
         var message = "Successfully created order";
         BookToOrderDTO book = new BookToOrderDTO(bookIsbn, quantity);
-        when(bookOrderService.createBookOrder(book)).thenReturn(message);
+        when(bookOrderService.createBookOrder(any())).thenReturn(message);
 
         //when
-        var result = bookOrderApplication.createBookOrder(book);
+        var result = bookOrderApplication.createBookOrder(List.of(book));
 
         //then
         assertNotNull(result);

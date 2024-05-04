@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +43,7 @@ public class BookOrderServiceTest {
         mockPostRequest(summaryOrderDTO, summaryBookDTO);
 
         //when
-        var result = bookOrderService.createBookOrder(bookOrderDto);
+        var result = bookOrderService.createBookOrder(List.of(bookOrderDto));
 
         //then
         assertNotNull(result);

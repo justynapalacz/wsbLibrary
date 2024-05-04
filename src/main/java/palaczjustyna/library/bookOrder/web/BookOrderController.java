@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import palaczjustyna.library.bookOrder.application.BookOrderApplication;
 import palaczjustyna.library.bookOrder.domain.BookToOrderDTO;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 public class BookOrderController {
@@ -21,7 +23,7 @@ public class BookOrderController {
     @PostMapping("/orderBooks")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public String orderBooks(@RequestBody BookToOrderDTO bookOrderDTO) {
-        return bookOrderApplication.createBookOrder(bookOrderDTO);
+    public String createBookOrder(@RequestBody List<BookToOrderDTO> bookOrderDTOs) {
+        return bookOrderApplication.createBookOrder(bookOrderDTOs);
     }
 }

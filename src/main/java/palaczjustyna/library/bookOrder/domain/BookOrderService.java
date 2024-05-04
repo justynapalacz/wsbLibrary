@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import palaczjustyna.library.book.domain.BookDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 @Service
@@ -23,13 +24,16 @@ public class BookOrderService {
     @Qualifier("webClientForBookOrder")
     private WebClient webClient;
 
-    public String createBookOrder(BookToOrderDTO bookToOrderDTO) {
-        Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookToOrderDTO.bookIsbn());
+    public String createBookOrder(List<BookToOrderDTO> bookToOrderDTOs) {
         Integer bookSummaryId = createBookSummary();
-        Integer bookOrderId = addBookOrderToSummary(bookToOrderDTO.quantity(), bookSummaryId, bookIdInBookWarehouse);
 
-        log.info("Book order added to summary. Book order id =" + bookOrderId);
-
+        bookToOrderDTOs.forEach(bookToOrderDTO -> {
+                    Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookToOrderDTO.bookIsbn());
+                    Integer bookOrderId = addBookOrderToSummary(bookToOrderDTO.quantity(), bookSummaryId, bookIdInBookWarehouse);
+                    log.info("Book order added to summary. Book order id =" + bookOrderId);
+                }
+        );
+        
         return "New book summary crated. Book summary id: " + bookSummaryId;
     }
     private Integer findBookIdInBookWarehouse(String bookIsbn) {
