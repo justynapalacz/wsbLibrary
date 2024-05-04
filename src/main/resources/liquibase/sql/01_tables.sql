@@ -14,6 +14,7 @@ CREATE TABLE books (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR (100),
   author VARCHAR(100),
+  isbn VARCHAR(13),
   status boolean not null default 1
 );
 

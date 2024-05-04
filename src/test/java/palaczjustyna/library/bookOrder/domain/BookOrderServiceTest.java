@@ -31,9 +31,9 @@ public class BookOrderServiceTest {
     @Test
     void shouldAddBookOrder() {
         //given
-        var bookTitle = "Dziady";
+        var bookIsbn = "9788378876274";
         var quantity = 10;
-        var bookOrderDto = new BookToOrderDTO(bookTitle, quantity);
+        var bookOrderDto = new BookToOrderDTO(bookIsbn, quantity);
         var bookDTO = new BookDTO();
         var summaryOrderDTO = new SummaryOrderDTO(10, LocalDateTime.now(), "NEW", "CARD", 1 );
         var summaryBookDTO = new SummaryBookDTO(null, 10, 2, 10);

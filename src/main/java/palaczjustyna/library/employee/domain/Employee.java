@@ -1,16 +1,14 @@
 package palaczjustyna.library.employee.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import palaczjustyna.library.security.SecurityRoles;
 
 import java.time.LocalDate;
 
 @Entity
-@Setter
-@Getter
+@Data
 @Table(name = "employees")
 @NoArgsConstructor
 public class Employee {

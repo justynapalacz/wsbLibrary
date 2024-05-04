@@ -1,17 +1,15 @@
 package palaczjustyna.library.user.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import palaczjustyna.library.borrow.domain.Borrow;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Setter
-@Getter
+@Data
 @Table(name = "users")
 @NoArgsConstructor
 public class User {

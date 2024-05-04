@@ -62,7 +62,7 @@ public class BorrowService {
         if(book.getStatus().equals(false)) {
             return "Book already borrowed. Please select another book.";
         }
-        bookApplication.updateBook(new BookUpdateDTO(book.getId(), null, null, false));
+        bookApplication.updateBook(new BookUpdateDTO(book.getId(), null, null, null, false));
         borrowRepository.save(new Borrow(user,book,LocalDateTime.now()));
         return "Successfully created borrow";
     }

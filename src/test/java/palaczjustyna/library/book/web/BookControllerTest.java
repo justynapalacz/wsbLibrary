@@ -66,11 +66,13 @@ class BookControllerTest {
         Integer id = 1;
         String title = "Dziady";
         String author = "Adam Mickiewicz";
-        BookCreateDTO bookDTO = new BookCreateDTO(title, author);
+        String isbn = "1234567891234";
+        BookCreateDTO bookDTO = new BookCreateDTO(title, author, isbn);
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
+        book.setIsbn(isbn);
         when(bookApplication.addBook(bookDTO)).thenReturn(book);
 
         //when
@@ -81,6 +83,7 @@ class BookControllerTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
+        assertEquals(isbn, result.getIsbn());
     }
 
     @Test
@@ -101,12 +104,14 @@ class BookControllerTest {
         Integer id = 1;
         String title = "Dziady2";
         String author = "Adam Mickiewicz2";
+        String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, status);
+        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, isbn, status);
         BookDTO book = new BookDTO();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
+        book.setIsbn(isbn);
         when(bookApplication.updateBook(bookDTO)).thenReturn(book);
 
         //when
@@ -117,5 +122,6 @@ class BookControllerTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
+        assertEquals(isbn, result.getIsbn());
     }
 }

@@ -22,10 +22,10 @@ public class BookOrderControllerTest {
     @Test
     void shouldOrderBook() {
         //given
-        String bookTitle = "Dziady";
+        String bookIsbn = "9788378876274";
         Integer quantity = 10;
         var message = "Successfully created order";
-        BookToOrderDTO book = new BookToOrderDTO(bookTitle, quantity);
+        BookToOrderDTO book = new BookToOrderDTO(bookIsbn, quantity);
         when(bookOrderApplication.createBookOrder(book)).thenReturn(message);
 
         //when

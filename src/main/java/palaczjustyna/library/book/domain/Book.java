@@ -1,16 +1,14 @@
 package palaczjustyna.library.book.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import palaczjustyna.library.borrow.domain.Borrow;
 
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Table(name = "books")
 public class Book {
@@ -23,16 +21,18 @@ public class Book {
     private String title;
     @Column(name = "author")
     private String author;
+    @Column(name = "isbn")
+    private String isbn;
     @Column (name = "status")
     private Boolean status;
 
     @OneToMany (mappedBy = "book")
     List<Borrow> borrowList;
 
-    public Book(String title, String author, Boolean status) {
+    public Book(String title, String author, String isbn, Boolean status) {
         this.title = title;
         this.author = author;
+        this.isbn = isbn;
         this.status = status;
     }
-
 }

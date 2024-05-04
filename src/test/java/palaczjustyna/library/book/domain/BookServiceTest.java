@@ -76,14 +76,16 @@ class BookServiceTest {
         Integer id = 1;
         String title = "Proces";
         String author = "Franz Kafka";
-        BookCreateDTO bookDTO = new BookCreateDTO(title, author);
-        Integer boorowId = 100;
+        String isbn = "1234567891234";
+        BookCreateDTO bookDTO = new BookCreateDTO(title, author, isbn);
+        Integer borrowId = 100;
         Borrow borrow = new Borrow();
-        borrow.setId(boorowId);
+        borrow.setId(borrowId);
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
+        book.setIsbn(isbn);
         book.setBorrowList(List.of(borrow));
         when(bookRepository.save(any())).thenReturn(book);
 
@@ -95,7 +97,8 @@ class BookServiceTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
-        assertEquals(boorowId, result.getBorrowList().get(0).getId());
+        assertEquals(isbn, result.getIsbn());
+        assertEquals(borrowId, result.getBorrowList().get(0).getId());
     }
 
     @Test
@@ -116,18 +119,21 @@ class BookServiceTest {
         Integer id = 1;
         String title = "Proces2";
         String author = "Franz Kafka2";
+        String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(id, title, author, status);
+        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(id, title, author, isbn, status);
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
+        book.setIsbn(isbn);
         book.setStatus(status);
 
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(id);
         bookDTO.setTitle(title);
         bookDTO.setAuthor(author);
+        bookDTO.setIsbn(isbn);
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
         when(bookRepository.save(any())).thenReturn(book);
         when(bookMapper.mapToBookDTO(any())).thenReturn(bookDTO);
@@ -141,6 +147,7 @@ class BookServiceTest {
         assertEquals(id, result.getId());
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
+        assertEquals(isbn, result.getIsbn());
     }
 
     @Test
@@ -149,8 +156,9 @@ class BookServiceTest {
         Integer id = 1;
         String title = "Proces2";
         String author = "Franz Kafka2";
+        String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, status);
+        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author,isbn, status);
 
         //when
         var exception = assertThrows(BookNotFoundException.class, () -> bookService.updateBook(bookDTO));

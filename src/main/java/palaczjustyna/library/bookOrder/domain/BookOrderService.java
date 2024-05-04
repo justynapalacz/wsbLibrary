@@ -24,7 +24,7 @@ public class BookOrderService {
     private WebClient webClient;
 
     public String createBookOrder(BookToOrderDTO bookToOrderDTO) {
-        Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookToOrderDTO.bookTitle());
+        Integer bookIdInBookWarehouse = findBookIdInBookWarehouse(bookToOrderDTO.bookIsbn());
         Integer bookSummaryId = createBookSummary();
         Integer bookOrderId = addBookOrderToSummary(bookToOrderDTO.quantity(), bookSummaryId, bookIdInBookWarehouse);
 
@@ -32,10 +32,10 @@ public class BookOrderService {
 
         return "New book summary crated. Book summary id: " + bookSummaryId;
     }
-    private Integer findBookIdInBookWarehouse(String bookTitle) {
+    private Integer findBookIdInBookWarehouse(String bookIsbn) {
         BookDTO bookDTO = webClient
                 .method(HttpMethod.GET)
-                .uri(builder -> builder.path("/getBookByTitle").queryParam("bookTitle", bookTitle).build())
+                .uri(builder -> builder.path("/getBookByIsbn").queryParam("isbn", bookIsbn).build())
                 .header("Accept", "application/json, text/plain, */*")
                 .retrieve()
                 .bodyToMono(BookDTO.class)

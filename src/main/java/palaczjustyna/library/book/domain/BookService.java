@@ -25,7 +25,7 @@ public class BookService {
     }
 
     public Book addBook(BookCreateDTO book) {
-        return bookRepository.save(new Book(book.title(), book.author(), true));
+        return bookRepository.save(new Book(book.title(), book.author(), book.isbn(), true));
     }
 
     public void deleteBook(Integer id) {
@@ -40,18 +40,22 @@ public class BookService {
         if (bookUpdate.title() != null) {
             book.setTitle(bookUpdate.title());
         }
+        if (bookUpdate.isbn() != null) {
+            book.setIsbn(bookUpdate.isbn());
+        }
         if (bookUpdate.status() != null) {
             book.setStatus(bookUpdate.status());
         }
         return bookMapper.mapToBookDTO(bookRepository.save(book));
     }
 
-    public Book findById(Integer id) {
-        return bookRepository.findById(id).orElseThrow( () -> new BookNotFoundException("The book with id = "+ id + " was not found."));
-    }
-
     public void returnBook(Book book) {
         book.setStatus(true);
         bookRepository.save(book);
     }
+
+    public Book findById(Integer id) {
+        return bookRepository.findById(id).orElseThrow( () -> new BookNotFoundException("The book with id = "+ id + " was not found."));
+    }
+
 }
