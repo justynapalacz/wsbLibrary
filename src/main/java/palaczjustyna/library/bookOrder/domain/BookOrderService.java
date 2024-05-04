@@ -11,6 +11,7 @@ import palaczjustyna.library.book.domain.BookDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 @Service
@@ -25,6 +26,7 @@ public class BookOrderService {
     private WebClient webClient;
 
     public String createBookOrder(List<BookToOrderDTO> bookToOrderDTOs) {
+        log.info("Create book order. Book order list {}", bookToOrderDTOs);
         Integer bookSummaryId = createBookSummary();
 
         bookToOrderDTOs.forEach(bookToOrderDTO -> {
@@ -33,7 +35,7 @@ public class BookOrderService {
                     log.info("Book order added to summary. Book order id =" + bookOrderId);
                 }
         );
-        
+
         return "New book summary crated. Book summary id: " + bookSummaryId;
     }
     private Integer findBookIdInBookWarehouse(String bookIsbn) {
@@ -45,12 +47,10 @@ public class BookOrderService {
                 .bodyToMono(BookDTO.class)
                 .block();
 
-        return bookDTO.getId();
+        return Objects.requireNonNull(bookDTO).getId();
     }
-
     private Integer createBookSummary() {
         SummaryOrderDTO summaryOrderDTO = new SummaryOrderDTO(null, LocalDateTime.now(), "NEW", "Bank transfer", clientId);
-
         SummaryOrderDTO result = webClient
                 .method(HttpMethod.POST)
                 .uri("/addSummary")
@@ -60,12 +60,10 @@ public class BookOrderService {
                 .bodyToMono(SummaryOrderDTO.class)
                 .block();
 
-        return result.id();
+        return Objects.requireNonNull(result).id();
     }
-
     private Integer addBookOrderToSummary(Integer quantity, Integer bookSummaryId, Integer bookIdInBookWarehouse) {
         SummaryBookDTO summaryBookDTO = new SummaryBookDTO(null, bookSummaryId, bookIdInBookWarehouse, quantity);
-
         SummaryBookDTO result = webClient
                 .method(HttpMethod.POST)
                 .uri("/addBookOrder")
@@ -75,7 +73,7 @@ public class BookOrderService {
                 .bodyToMono(SummaryBookDTO.class)
                 .block();
 
-        return result.id();
+        return Objects.requireNonNull(result).id();
     }
 
 }

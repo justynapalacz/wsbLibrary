@@ -16,7 +16,7 @@ public class BookOrderApplication {
     private BookOrderService bookOrderService;
 
     public String createBookOrder(List<BookToOrderDTO> bookToOrderDTOs){
-        log.info("Create book order. BookOrderDtos", bookToOrderDTOs);
+        log.info("Create book order. Book order list {}", bookToOrderDTOs);
        return bookOrderService.createBookOrder(bookToOrderDTOs);
     }
 }
