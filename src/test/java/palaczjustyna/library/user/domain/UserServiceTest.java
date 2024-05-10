@@ -2,6 +2,7 @@ package palaczjustyna.library.user.domain;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -71,14 +72,18 @@ public class UserServiceTest {
         LocalDate dateOfBirth = LocalDate.parse("1980-01-01");
         String password = "jannowak";
         String email = "jan@wp.pl";
+
         User user = new User();
         user.setId(id);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setDateOfBirth(dateOfBirth);
-        user.setPassword(password);
-        user.setEmail(email);
+        user.setFirstName("oldFirstName");
+        user.setLastName("oldLastName");
+        user.setDateOfBirth( LocalDate.parse("1980-02-01"));
+        user.setPassword("oldFirstName");
+        user.setEmail("oldEmail@o2.pl");
+
         UserDTO userDTO = new UserDTO(id, firstName, lastName,null,password,dateOfBirth,email );
+
+        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
         when(userMapper.mapToUserDTO(any())).thenReturn(userDTO);
@@ -94,6 +99,13 @@ public class UserServiceTest {
         assertEquals(password, result.password());
         assertEquals(dateOfBirth, result.dateOfBirth());
         assertEquals(email, result.email());
+
+        verify(userRepository).save(argument.capture());
+        assertEquals(firstName, argument.getValue().getFirstName());
+        assertEquals(lastName, argument.getValue().getLastName());
+        assertEquals(dateOfBirth, argument.getValue().getDateOfBirth());
+        assertEquals(password, argument.getValue().getPassword());
+        assertEquals(email, argument.getValue().getEmail());
     }
 
     @Test

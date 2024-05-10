@@ -2,6 +2,7 @@ package palaczjustyna.library.book.domain;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -122,22 +123,25 @@ class BookServiceTest {
         String isbn = "1234567891234";
         Boolean status = true;
         BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(id, title, author, isbn, status);
+
         Book book = new Book();
         book.setId(id);
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setIsbn(isbn);
-        book.setStatus(status);
+        book.setTitle("oldTitle");
+        book.setAuthor("oldAuthor");
+        book.setIsbn("oldIsb");
+        book.setStatus(!status);
 
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(id);
         bookDTO.setTitle(title);
         bookDTO.setAuthor(author);
         bookDTO.setIsbn(isbn);
-        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
-        when(bookRepository.save(any())).thenReturn(book);
-        when(bookMapper.mapToBookDTO(any())).thenReturn(bookDTO);
+        ArgumentCaptor<Book> argument = ArgumentCaptor.forClass(Book.class);
 
+
+        when(bookRepository.findById(id)).thenReturn(Optional.of(book));
+        when(bookRepository.save(book)).thenReturn(book);
+        when(bookMapper.mapToBookDTO(book)).thenReturn(bookDTO);
 
         //when
         var result = bookService.updateBook(bookUpdateDTO);
@@ -148,6 +152,12 @@ class BookServiceTest {
         assertEquals(title, result.getTitle());
         assertEquals(author, result.getAuthor());
         assertEquals(isbn, result.getIsbn());
+
+        verify(bookRepository).save(argument.capture());
+        assertEquals(author, argument.getValue().getAuthor());
+        assertEquals(isbn, argument.getValue().getIsbn());
+        assertEquals(title, argument.getValue().getTitle());
+        assertEquals(status, argument.getValue().getStatus());
     }
 
     @Test

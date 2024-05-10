@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import palaczjustyna.library.borrow.domain.Borrow;
+import palaczjustyna.library.mutationTest.DoNotMutate;
 
 import java.util.List;
 
+@DoNotMutate
 @Entity
 @Data
 @NoArgsConstructor

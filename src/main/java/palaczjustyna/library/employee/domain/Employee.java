@@ -3,10 +3,12 @@ package palaczjustyna.library.employee.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import palaczjustyna.library.mutationTest.DoNotMutate;
 import palaczjustyna.library.security.SecurityRoles;
 
 import java.time.LocalDate;
 
+@DoNotMutate
 @Entity
 @Data
 @Table(name = "employees")

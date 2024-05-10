@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import palaczjustyna.library.book.domain.Book;
+import palaczjustyna.library.mutationTest.DoNotMutate;
 import palaczjustyna.library.user.domain.User;
 
 import java.time.LocalDateTime;
 
+@DoNotMutate
 @Entity
 @Data
 @Table(name = "borrow")

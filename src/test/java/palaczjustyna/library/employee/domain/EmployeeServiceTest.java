@@ -2,6 +2,7 @@ package palaczjustyna.library.employee.domain;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,7 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
@@ -107,12 +107,13 @@ public class EmployeeServiceTest {
 
         Employee employee = new Employee();
         employee.setId(id);
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
-        employee.setDateOfBirth(dateOfBirth);
-        employee.setPassword(password);
-        employee.setEmail(email);
-        employee.setRole(role);
+        employee.setFirstName("oldFirstname");
+        employee.setLastName("oldLastName");
+        employee.setDateOfBirth(LocalDate.parse("1975-01-01"));
+        employee.setPassword("oldPassword");
+        employee.setEmail("oldemail@o2.pl");
+        employee.setRole(SecurityRoles.LIBRARIAN);
+        ArgumentCaptor<Employee> argument = ArgumentCaptor.forClass(Employee.class);
 
         when(employeeRepository.save(any())).thenReturn(employee);
         when(employeeRepository.findById(id)).thenReturn(Optional.of(employee));
@@ -130,6 +131,13 @@ public class EmployeeServiceTest {
         assertEquals(email, result.getEmail());
         assertEquals(role, result.getRole());
 
+        verify(employeeRepository).save(argument.capture());
+        assertEquals(firstName, argument.getValue().getFirstName());
+        assertEquals(lastName, argument.getValue().getLastName());
+        assertEquals(dateOfBirth, argument.getValue().getDateOfBirth());
+        assertEquals(password, argument.getValue().getPassword());
+        assertEquals(email, argument.getValue().getEmail());
+        assertEquals(role, argument.getValue().getRole());
     }
 
     @Test
