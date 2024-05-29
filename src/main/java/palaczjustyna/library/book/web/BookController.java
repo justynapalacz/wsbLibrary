@@ -1,5 +1,6 @@
 package palaczjustyna.library.book.web;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class BookController {
     @PostMapping("/addBook")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
-    Book addBook(@RequestBody BookCreateDTO book){
+    Book addBook(@Valid @RequestBody BookCreateDTO book){
         log.info("Add book. BookCreateDTO: {}", book);
         return bookApplication.addBook(book);
     }

@@ -1,5 +1,6 @@
 package palaczjustyna.library.bookOrder.web;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class BookOrderController {
     @PostMapping("/orderBooks")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createBookOrder(@RequestBody List<BookToOrderDTO> bookOrderDTOs) {
+    public String createBookOrder(@Valid @RequestBody List<BookToOrderDTO> bookOrderDTOs) {
         log.info("Create book order. Book order list {}", bookOrderDTOs);
         return bookOrderApplication.createBookOrder(bookOrderDTOs);
     }

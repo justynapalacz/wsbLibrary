@@ -1,4 +1,14 @@
 package palaczjustyna.library.book.domain;
 
-public record BookCreateDTO(String title, String author, String isbn) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record BookCreateDTO(
+        @NotEmpty(message = "Title must be not empty")
+        String title,
+        @NotEmpty(message = "Author must be not empty")
+        String author,
+        @NotEmpty(message = "ISBN must be not empty")
+        String isbn) {
 }
+
+

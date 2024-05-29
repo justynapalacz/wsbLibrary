@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset Justyna Palacz:2
-INSERT INTO users(first_name, last_name,date_of_birth, login, password, email) VALUES('Jan', 'Nowak', '1991-09-11','jannowak','jannowak', 'jan@wp.pl');
+INSERT INTO users(first_name, last_name,date_of_birth, login, password, email) VALUES('Jan', 'Nowak', '1991-09-11','jannowak','jannowak', 'testbibliotekaczewa@gmail.com');
 INSERT INTO users(first_name, last_name,date_of_birth, login, password, email) VALUES('Adam', 'Kowalski', '1988-01-11','adamkowalski','adamkowalski', 'akow@onet.pl');
 INSERT INTO users(first_name, last_name,date_of_birth, login, password, email) VALUES('Ewa', 'Olszewska', '1988-01-11','ewaolszewska','ewaolszewska', 'eolszewska@o2.pl');
 INSERT INTO users(first_name, last_name,date_of_birth, login, password, email) VALUES('Andrzej', 'Kowalczyk', '1988-02-11','andrzejkowalczyk','andrzejkowalczyk', 'andrzejkowalczyk@o2.pl');

@@ -1,8 +1,10 @@
 package palaczjustyna.library.borrow.web;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import palaczjustyna.library.borrow.application.BorrowApplication;
@@ -37,7 +39,7 @@ public class BorrowController {
     @PostMapping("/addBorrow")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
-    String addBorrow(@RequestBody BorrowCreateDTO borrowCreateDTO){
+    String addBorrow(@Valid @RequestBody BorrowCreateDTO borrowCreateDTO){
         log.info("Add borrow. BorrowCreateDTO : {}", borrowCreateDTO);
         return borrowApplication.addBorrow(borrowCreateDTO);
     }
@@ -55,6 +57,7 @@ public class BorrowController {
         log.info("Charge penalty for borrowId : {}", borrowId);
         return borrowApplication.chargePenalty(borrowId);
     }
+    @Scheduled(cron = "0 0 0 * * *")
     @GetMapping("/sendEmail")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
