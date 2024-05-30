@@ -21,7 +21,7 @@ public class BookController {
     @Autowired
     private BookApplication bookApplication;
 
-    @GetMapping("/getBooks")
+    @GetMapping("/books")
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
     List<BookDTO> getAllBooks() {
@@ -29,7 +29,7 @@ public class BookController {
         return bookApplication.getAllBooks();
     }
 
-    @GetMapping("/getBookByTitle")
+    @GetMapping("/booksByTitle")
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
     List<BookDTO> getBookByTitle(@RequestParam(value = "title")  String title){
@@ -37,7 +37,7 @@ public class BookController {
         return bookApplication.getBookByTitle(title);
     }
 
-    @PostMapping("/addBook")
+    @PostMapping("/books")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
     Book addBook(@Valid @RequestBody BookCreateDTO book){
@@ -45,18 +45,18 @@ public class BookController {
         return bookApplication.addBook(book);
     }
 
-    @DeleteMapping("/deleteBook")
+    @DeleteMapping("/books/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteBook (@RequestParam(value = "id")  Integer id){
+    void deleteBook (@PathVariable(value = "id")  Integer id){
         log.info("Delete book. Book id to delete: {}", id);
         bookApplication.deleteBook(id);
     }
 
-    @PutMapping ("/updateBook")
+    @PutMapping ("/books/{id}")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
-    BookDTO updateBook(@RequestBody BookUpdateDTO book){
+    BookDTO updateBook(@PathVariable("id") Integer id, @RequestBody BookUpdateDTO book){
         log.info("Update book. BookUpdateDTO: {}", book);
         return bookApplication.updateBook (book);
     }

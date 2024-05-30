@@ -37,7 +37,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result = WebClient.create("http://localhost:" + port )
                 .method(HttpMethod.POST)
-                .uri(builder -> builder.path("/addEmployee").build())
+                .uri(builder -> builder.path("/employees").build())
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(employeeDTO))
                 .retrieve()
@@ -56,7 +56,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         WebClient.create("http://localhost:" + port )
                 .method(HttpMethod.DELETE)
-                .uri(builder -> builder.path("/deleteEmployee").queryParam("id", employeeBeforeDelete[0].getId()).build())
+                .uri(builder -> builder.path("/employees/{id}").build(employeeBeforeDelete[0].getId()))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(String.class)
@@ -81,7 +81,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result = WebClient.create("http://localhost:" + port )
                 .method(HttpMethod.PUT)
-                .uri(builder -> builder.path("/updateEmployee").build())
+                .uri(builder -> builder.path("/employees/{id}").build(employeeIdToUpdate))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(employeeDTO))
                 .retrieve()
@@ -99,7 +99,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
     private Employee[] getAllEmployee() {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri(builder -> builder.path("/getEmployees").build())
+                .uri(builder -> builder.path("/employees").build())
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(Employee[].class)

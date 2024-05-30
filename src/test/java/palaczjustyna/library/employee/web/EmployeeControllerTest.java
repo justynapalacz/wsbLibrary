@@ -107,7 +107,7 @@ public class EmployeeControllerTest {
         when(employeeApplication.updateEmployee(employeeDTO)).thenReturn(employee);
 
         //when
-        var result = employeeController.updateEmployee(employeeDTO);
+        var result = employeeController.updateEmployee(id, employeeDTO);
 
         //then
         assertNotNull(result);

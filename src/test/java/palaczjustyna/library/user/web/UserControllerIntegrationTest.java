@@ -54,7 +54,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result =  WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.PUT)
-                .uri("updateUser")
+                .uri(builder -> builder.path("/users/{id}").build(userIdToUpdate))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(userDTO))
                 .retrieve()
@@ -78,7 +78,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result =  WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.POST)
-                .uri("addUser")
+                .uri("users")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(userDTO))
                 .retrieve()
@@ -100,7 +100,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.DELETE)
-                .uri(builder -> builder.path("/deleteUser").queryParam("id", userIdToDelete).build())
+                .uri(builder -> builder.path("/users/{id}").build(userIdToDelete))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(UserDTO.class)
@@ -113,7 +113,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
     private UserDTO[] getAllUsers() {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri("getUsers")
+                .uri("users")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(UserDTO[].class)
@@ -123,7 +123,7 @@ public class UserControllerIntegrationTest extends AbstractIntegrationTest {
     public static UserDTO[] findUserByLastName(String lastName, int port) {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri(builder -> builder.path("/getUserByLastName").queryParam("lastName", lastName).build())
+                .uri(builder -> builder.path("/usersByLastName").queryParam("lastName", lastName).build())
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(UserDTO[].class)

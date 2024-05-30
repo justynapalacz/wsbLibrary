@@ -55,7 +55,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result = WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.POST)
-                .uri("addBook")
+                .uri("books")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(bookDTO))
                 .retrieve()
@@ -79,7 +79,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.DELETE)
-                .uri(builder -> builder.path("/deleteBook").queryParam("id", id).build())
+                .uri(builder -> builder.path("/books/{id}").build(id))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(void.class)
@@ -101,7 +101,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result = WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.PUT)
-                .uri("updateBook")
+                .uri(builder -> builder.path("/books/{id}").build(id))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(bookDTO))
                 .retrieve()
@@ -116,7 +116,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
     private BookDTO[] getAllBooks() {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri("getBooks")
+                .uri("books")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(BookDTO[].class)
@@ -126,7 +126,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
     public static BookDTO[] findBookByTitle(String title, int port) {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri(builder -> builder.path("/getBookByTitle").queryParam("title", title).build())
+                .uri(builder -> builder.path("/booksByTitle").queryParam("title", title).build())
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(BookDTO[].class)

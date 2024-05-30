@@ -18,7 +18,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeApplication employeeApplication;
 
-    @GetMapping("/getEmployees")
+    @GetMapping("/employees")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     List<Employee> getAllEmployees() {
@@ -26,7 +26,7 @@ public class EmployeeController {
         return employeeApplication.getAllEmployees();
     }
 
-    @PostMapping("/addEmployee")
+    @PostMapping("/employees")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     Employee addEmployee(@RequestBody EmployeeDTO employeeDTO){
@@ -34,18 +34,18 @@ public class EmployeeController {
         return employeeApplication.addEmployee(employeeDTO);
     }
 
-    @DeleteMapping("/deleteEmployee")
+    @DeleteMapping("/employees/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public void deleteEmployee (@RequestParam(value = "id")  Integer id){
+     public void deleteEmployee (@PathVariable(value = "id")  Integer id){
         log.info("Delete employee. EmployeeId : {}", id);
         employeeApplication.deleteEmployee(id);
     }
 
-    @PutMapping("/updateEmployee")
+    @PutMapping("/employees/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    Employee updateEmployee(@RequestBody EmployeeDTO employeeDTO){
+    Employee updateEmployee(@PathVariable(value = "id")  Integer id, @RequestBody EmployeeDTO employeeDTO){
         log.info("Update employee. EmployeeDTO : {}", employeeDTO);
         return employeeApplication.updateEmployee(employeeDTO);
     }

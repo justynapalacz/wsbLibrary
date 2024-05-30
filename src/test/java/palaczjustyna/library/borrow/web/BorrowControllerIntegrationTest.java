@@ -60,7 +60,7 @@ class BorrowControllerIntegrationTest extends AbstractIntegrationTest {
         //when
         var result =  WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.POST)
-                .uri("addBorrow")
+                .uri("borrows")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(borrowCreateDTO))
                 .retrieve()
@@ -81,7 +81,7 @@ class BorrowControllerIntegrationTest extends AbstractIntegrationTest {
         // when
         var result =  WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.PUT)
-                .uri(builder -> builder.path("/returnBook").queryParam("id", borrowId).build())
+                .uri(builder -> builder.path("/borrows/{id}").build(borrowId))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(String.class)
@@ -118,7 +118,7 @@ class BorrowControllerIntegrationTest extends AbstractIntegrationTest {
     private BorrowDTO[] getAllBorrows() {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri("getBorrows")
+                .uri("borrows")
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(BorrowDTO[].class)
@@ -128,7 +128,7 @@ class BorrowControllerIntegrationTest extends AbstractIntegrationTest {
     private BorrowDTO getBorrowById(int id) {
         return WebClient.create("http://localhost:" + port)
                 .method(HttpMethod.GET)
-                .uri(builder -> builder.path("/getBorrowsById").queryParam("id", id).build())
+                .uri(builder -> builder.path("/borrows/{id}").build(id))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .retrieve()
                 .bodyToMono(BorrowDTO.class)

@@ -49,7 +49,7 @@ public class UserControllerTest {
         when(userApplication.updateUser(userDTO)).thenReturn(userDTO);
 
         //when
-        var result = userController.updateUser(userDTO);
+        var result = userController.updateUser(id, userDTO);
 
         //then
         assertNotNull(result);

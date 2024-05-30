@@ -20,7 +20,7 @@ public class BorrowController {
     @Autowired
     private BorrowApplication borrowApplication;
 
-    @GetMapping("/getBorrows")
+    @GetMapping("/borrows")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
     List<BorrowDTO> getAllBorrows() {
@@ -28,25 +28,25 @@ public class BorrowController {
         return borrowApplication.getAllBorrows();
     }
 
-    @GetMapping("/getBorrowsById")
+    @GetMapping("/borrows/{id}")
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
-    BorrowDTO getBorrowsById(@RequestParam(value = "id")  Integer id) {
+    BorrowDTO getBorrowsById(@PathVariable(value = "id")  Integer id) {
         log.info("Get borrows by Id. Id : {}", id);
         return borrowApplication.getBorrowsById(id);
     }
 
-    @PostMapping("/addBorrow")
+    @PostMapping("/borrows")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
     String addBorrow(@Valid @RequestBody BorrowCreateDTO borrowCreateDTO){
         log.info("Add borrow. BorrowCreateDTO : {}", borrowCreateDTO);
         return borrowApplication.addBorrow(borrowCreateDTO);
     }
-    @PutMapping ("/returnBook")
+    @PutMapping ("/borrows/{id}")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
-    String updateBorrowAndReturnBook(@RequestParam(value = "id") Integer borrowId ){
+    String updateBorrowAndReturnBook(@PathVariable(value = "id") Integer borrowId ){
         log.info("Update borrow and return book for borrowId : {}", borrowId);
         return borrowApplication.updateBorrowAndReturnBook(borrowId);
     }

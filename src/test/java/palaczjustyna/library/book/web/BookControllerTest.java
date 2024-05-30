@@ -115,7 +115,7 @@ class BookControllerTest {
         when(bookApplication.updateBook(bookDTO)).thenReturn(book);
 
         //when
-        var result = bookController.updateBook(bookDTO);
+        var result = bookController.updateBook(id, bookDTO);
 
         //then
         assertNotNull(result);

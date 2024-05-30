@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserApplication userApplication;
 
-    @GetMapping("/getUsers")
+    @GetMapping("/users")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
     List<UserDTO> getAllUsers() {
@@ -26,15 +26,15 @@ public class UserController {
         return userApplication.getAllUsers();
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/users/{id}")
     @PreAuthorize("hasAuthority('ROLE_READER')")
     @ResponseStatus(HttpStatus.OK)
-    UserDTO updateUser(@RequestBody UserDTO user){
+    UserDTO updateUser(@PathVariable (value = "id")  Integer id, @RequestBody UserDTO user){
         log.info("Update User. UserDTO: {}", user);
         return userApplication.updateUser(user);
     }
 
-    @PostMapping("/addUser")
+    @PostMapping("/users")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.CREATED)
     User addUser(@RequestBody UserDTO userDTO){
@@ -42,15 +42,15 @@ public class UserController {
         return userApplication.addUser(userDTO);
     }
 
-    @DeleteMapping("/deleteUser")
+    @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteUser (@RequestParam(value = "id")  Integer id){
+    void deleteUser (@PathVariable (value = "id")  Integer id){
         log.info("Delete user id : {}", id);
         userApplication.deleteUser(id);
     }
 
-    @GetMapping("/getUserByLastName")
+    @GetMapping("/usersByLastName")
     @PreAuthorize("hasAuthority('ROLE_LIBRARIAN')")
     @ResponseStatus(HttpStatus.OK)
     List<UserDTO> getUserByLastNameLike(@RequestParam(value = "lastName")  String lastName){
