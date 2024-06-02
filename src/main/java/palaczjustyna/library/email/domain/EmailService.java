@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import palaczjustyna.library.kafka.producer.KafkaProducer;
 
 @Service
 @Slf4j
@@ -16,22 +17,31 @@ public class EmailService {
     @Qualifier("webClientForEmailSender")
     private WebClient webClient;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
     public void sendEmailToUser(EmailToSendDTO emailToSendDTO) {
         log.info("Email send from: {} ", emailToSendDTO.from());
         log.info("Email send to: {} ", emailToSendDTO.to());
         log.info("Email subject: {} ", emailToSendDTO.subject());
         log.info("Email body: {} ", emailToSendDTO.body());
 
-        String message = webClient
-                .method(HttpMethod.POST)
-                .uri("/createEmail")
-                .body(BodyInserters.fromValue(emailToSendDTO))
-                .header("Accept", "application/json, text/plain, */*")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            String message = webClient
+                    .method(HttpMethod.POST)
+                    .uri("/createEmail")
+                    .body(BodyInserters.fromValue(emailToSendDTO))
+                    .header("Accept", "application/json, text/plain, */*")
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        log.info("Message from EmailSander: {}", message);
+            log.info("Message from EmailSander: {}", message);
+        } catch (Exception exception) {
+            log.error("Problem with communication to EmailSender. Exception: {}", exception.getMessage());
+            log.info("Send email by kafka mechanism.");
+            kafkaProducer.sendMessage(emailToSendDTO);
+        }
     }
 
 }
