@@ -138,16 +138,16 @@ class BookApplicationTest {
         String author = "Adam Mickiewicz2";
         String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author, isbn, status);
+        BookUpdateDTO bookDTO = new BookUpdateDTO(title, author, isbn, status);
         BookDTO book = new BookDTO();
         book.setId(id);
         book.setTitle(title);
         book.setAuthor(author);
         book.setIsbn(isbn);
-        when(bookService.updateBook(bookDTO)).thenReturn(book);
+        when(bookService.updateBook(id, bookDTO)).thenReturn(book);
 
         //when
-        var result = bookApplication.updateBook(bookDTO);
+        var result = bookApplication.updateBook(id, bookDTO);
 
         //then
         assertNotNull(result);

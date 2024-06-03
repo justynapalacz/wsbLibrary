@@ -9,6 +9,17 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import palaczjustyna.library.kafka.producer.KafkaProducer;
 
+/**
+ * The EmailService class provides methods for sending emails to users.
+ * It utilizes a WebClient to communicate with the email sender service.
+ *
+ * <p>This class is annotated with {@link Service} to indicate that it is a service component
+ * and {@link Slf4j} for logging purposes.</p>
+ *
+ * @see WebClient
+ * @see EmailToSendDTO
+ * @see KafkaProducer
+ */
 @Service
 @Slf4j
 public class EmailService {
@@ -20,6 +31,13 @@ public class EmailService {
     @Autowired
     private KafkaProducer kafkaProducer;
 
+    /**
+     * Sends an email to the user based on the provided {@link EmailToSendDTO}.
+     * It communicates with the email sender service using a WebClient.
+     * If communication with the service fails, it falls back to sending the email via Kafka.
+     *
+     * @param emailToSendDTO the {@link EmailToSendDTO} object containing the details of the email to be sent.
+     */
     public void sendEmailToUser(EmailToSendDTO emailToSendDTO) {
         log.info("Email send from: {} ", emailToSendDTO.from());
         log.info("Email send to: {} ", emailToSendDTO.to());

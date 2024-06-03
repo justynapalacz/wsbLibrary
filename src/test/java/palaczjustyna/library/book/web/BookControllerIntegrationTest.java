@@ -96,7 +96,7 @@ public class BookControllerIntegrationTest extends AbstractIntegrationTest {
         Integer id = findBookByTitle(title, port)[0].getId();
         String newTitle = "Dziady2";
 
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, newTitle, null, null, null);
+        BookUpdateDTO bookDTO = new BookUpdateDTO(newTitle, null, null, null);
 
         //when
         var result = WebClient.create("http://localhost:" + port)

@@ -122,7 +122,7 @@ class BookServiceTest {
         String author = "Franz Kafka2";
         String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(id, title, author, isbn, status);
+        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO(title, author, isbn, status);
 
         Book book = new Book();
         book.setId(id);
@@ -144,7 +144,7 @@ class BookServiceTest {
         when(bookMapper.mapToBookDTO(book)).thenReturn(bookDTO);
 
         //when
-        var result = bookService.updateBook(bookUpdateDTO);
+        var result = bookService.updateBook(id, bookUpdateDTO);
 
         //then
         assertNotNull(result);
@@ -168,10 +168,10 @@ class BookServiceTest {
         String author = "Franz Kafka2";
         String isbn = "1234567891234";
         Boolean status = true;
-        BookUpdateDTO bookDTO = new BookUpdateDTO(id, title, author,isbn, status);
+        BookUpdateDTO bookDTO = new BookUpdateDTO(title, author,isbn, status);
 
         //when
-        var exception = assertThrows(BookNotFoundException.class, () -> bookService.updateBook(bookDTO));
+        var exception = assertThrows(BookNotFoundException.class, () -> bookService.updateBook(id, bookDTO));
 
         //then
         assertEquals("The book with id = " + id + " was not found.", exception.getMessage());

@@ -18,6 +18,24 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The BorrowService class provides methods for managing borrow-related operations.
+ * It interacts with the database and other services to perform borrow operations.
+ *
+ * <p>This class is annotated with {@link Service} to indicate that it is a service component
+ * and {@link Slf4j} for logging purposes.</p>
+ *
+ * @see BorrowRepository
+ * @see BorrowMapper
+ * @see BookApplication
+ * @see UserApplication
+ * @see Borrow
+ * @see BorrowCreateDTO
+ * @see BorrowDTO
+ * @see BorrowNotFoundException
+ * @see Book
+ * @see User
+ */
 @Service
 @Slf4j
 public class BorrowService {
@@ -44,21 +62,46 @@ public class BorrowService {
     @Value("${mail.from}")
     private String mailFrom;
 
+    /**
+     * Retrieves all borrows.
+     *
+     * @return a list of {@link BorrowDTO} objects representing all borrows.
+     */
     public List<BorrowDTO> getAllBorrows() {
         log.info("Get all borrows");
         return ((List<Borrow>) borrowRepository.findAll()).stream().map(barrow -> borrowMapper.mapToBarrowDTO(barrow)).toList();
     }
 
+    /**
+     * Retrieves a borrow by its ID.
+     *
+     * @param id the ID of the borrow to retrieve.
+     * @return the {@link BorrowDTO} object with the specified ID.
+     * @throws BorrowNotFoundException if the borrow with the given ID does not exist.
+     */
     public BorrowDTO getBorrowsDTOById(Integer id) {
         log.info("Get borrow dto by Id. Id : {}", id);
         return borrowMapper.mapToBarrowDTO(this.getBorrowsById(id)) ;
     }
 
+    /**
+     * Retrieves a borrow by its ID.
+     *
+     * @param id the ID of the borrow to retrieve.
+     * @return the {@link Borrow} object with the specified ID.
+     * @throws BorrowNotFoundException if the borrow with the given ID does not exist.
+     */
     public Borrow getBorrowsById(Integer id) {
         log.info("Get borrow by Id. Id : {}", id);
         return  borrowRepository.findById(id).orElseThrow(()-> new BorrowNotFoundException("The borrow with id = " + id + " is not exist." ));
     }
 
+    /**
+     * Adds a new borrow.
+     *
+     * @param borrowCreateDTO the {@link BorrowCreateDTO} object containing the details of the new borrow.
+     * @return a string message indicating the result of the borrow creation process.
+     */
     public String addBorrow(BorrowCreateDTO borrowCreateDTO) {
         log.info("Add borrow. BorrowCreateDTO : {}", borrowCreateDTO);
         User user = userApplication.findById(borrowCreateDTO.userId());
@@ -66,11 +109,17 @@ public class BorrowService {
         if(book.getStatus().equals(false)) {
             return "Book already borrowed. Please select another book.";
         }
-        bookApplication.updateBook(new BookUpdateDTO(book.getId(), null, null, null, false));
+        bookApplication.updateBook(book.getId(), new BookUpdateDTO(null, null, null, false));
         borrowRepository.save(new Borrow(user,book,LocalDateTime.now()));
         return "Successfully created borrow";
     }
 
+    /**
+     * Updates a borrow and returns the book.
+     *
+     * @param borrowId the ID of the borrow to update.
+     * @return a string message indicating the result of the borrow update process.
+     */
     public String updateBorrowAndReturnBook(Integer borrowId) {
         log.info("Update borrow and return book for borrowId : {}", borrowId);
        Borrow borrow = this.getBorrowsById(borrowId);
@@ -84,6 +133,16 @@ public class BorrowService {
        return "Successfully return";
     }
 
+    /**
+     * Calculates and charges penalty for a borrow based on the allowed number of days and penalty rate.
+     * If the book has already been returned, it returns a message indicating that the book was returned.
+     * Otherwise, it calculates the penalty based on the difference between the current date and the borrow date.
+     * If the difference exceeds the allowed number of days, it calculates the penalty as the difference multiplied by the penalty rate.
+     * Otherwise, it returns a message indicating that the book is returned on time.
+     *
+     * @param borrowId the ID of the borrow for which penalty is to be charged.
+     * @return a string message indicating the result of the penalty charging process.
+     */
     public String chargePenalty(Integer borrowId) {
         log.info("Charge penalty for borrowId : {}", borrowId);
         double penalty;
@@ -103,6 +162,13 @@ public class BorrowService {
         }
     }
 
+    /**
+     * Sends reminder emails to users for returning books that are overdue.
+     * It retrieves all borrows, filters out the ones that are not returned and overdue,
+     * and sends reminder emails to the corresponding users.
+     *
+     * @return a list of {@link BorrowDTO} objects representing the borrows for which emails were sent.
+     */
     public List<BorrowDTO> sendEmail() {
         log.info("Send emails to users.");
         List<BorrowDTO> borrowsAfterTerminToSendEmail = getAllBorrows();

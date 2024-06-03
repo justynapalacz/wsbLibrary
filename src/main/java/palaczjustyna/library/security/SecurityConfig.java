@@ -24,6 +24,12 @@ import palaczjustyna.library.user.domain.UserDTO;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The SecurityConfig class configures security settings for the application.
+ * It is annotated with {@link Configuration} to indicate that it is a configuration class,
+ * {@link EnableWebSecurity} to enable Spring Security's web security features,
+ * and {@link EnableMethodSecurity} to enable method-level security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -40,6 +46,13 @@ public class SecurityConfig {
 
     @Value("${admin.password}")
     private String adminPassword;
+
+    /**
+     * Configures the user details service, which provides user authentication details.
+     *
+     * @param encoder the password encoder used to encode passwords
+     * @return a {@link UserDetailsService} implementation
+     */
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         List<UserDetails> users = new ArrayList<>();
@@ -80,6 +93,13 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(users);
     }
 
+    /**
+     * Configures security filter chain.
+     *
+     * @param http the {@link HttpSecurity} object to configure
+     * @return the configured {@link SecurityFilterChain}
+     * @throws Exception if an error occurs while configuring security
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -91,6 +111,11 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Creates a password encoder bean.
+     *
+     * @return a {@link PasswordEncoder} implementation
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
