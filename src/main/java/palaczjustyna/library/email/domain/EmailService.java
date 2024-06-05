@@ -1,7 +1,6 @@
 package palaczjustyna.library.email.domain;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -24,12 +23,13 @@ import palaczjustyna.library.kafka.producer.KafkaProducer;
 @Slf4j
 public class EmailService {
 
-    @Autowired
-    @Qualifier("webClientForEmailSender")
-    private WebClient webClient;
+    private final WebClient webClient;
+    private final KafkaProducer kafkaProducer;
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
+    public EmailService(@Qualifier("webClientForEmailSender") WebClient webClient, KafkaProducer kafkaProducer ){
+        this.webClient = webClient;
+        this.kafkaProducer = kafkaProducer;
+    }
 
     /**
      * Sends an email to the user based on the provided {@link EmailToSendDTO}.

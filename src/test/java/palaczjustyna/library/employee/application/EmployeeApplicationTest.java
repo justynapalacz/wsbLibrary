@@ -54,7 +54,7 @@ public class EmployeeApplicationTest {
         String password = "jannowak";
         String email = "jan@wp.pl";
         SecurityRoles role = SecurityRoles.READER;
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, firstName, lastName, dateOfBirth, login, password, email, role);
+        EmployeeDTO employeeDTO = new EmployeeDTO(firstName, lastName, dateOfBirth, login, password, email, role);
         Employee employee = new Employee();
         employee.setId(id);
         employee.setFirstName(firstName);
@@ -99,15 +99,15 @@ public class EmployeeApplicationTest {
         Integer id = 1;
         String firstName = "Jan";
         String lastName = "Nowak";
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, firstName, lastName, null, null, null, null, null);
+        EmployeeDTO employeeDTO = new EmployeeDTO(firstName, lastName, null, null, null, null, null);
         Employee employee = new Employee();
         employee.setId(id);
         employee.setFirstName(firstName);
         employee.setLastName(lastName);
-        when(employeeService.updateEmployee(employeeDTO)).thenReturn(employee);
+        when(employeeService.updateEmployee(id, employeeDTO)).thenReturn(employee);
 
         //when
-        var result = employeeApplication.updateEmployee(employeeDTO);
+        var result = employeeApplication.updateEmployee(id, employeeDTO);
 
         //then
         assertNotNull(result);

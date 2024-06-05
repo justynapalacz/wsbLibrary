@@ -1,5 +1,6 @@
 package palaczjustyna.library.bookOrder.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +13,6 @@ import palaczjustyna.library.book.domain.BookDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The BookOrderService class provides methods for managing book order-related operations.
@@ -35,9 +34,11 @@ public class BookOrderService {
     @Value("${library.clientId.warehouse}")
     private Integer clientId;
 
-    @Autowired
-    @Qualifier("webClientForBookOrder")
-    private WebClient webClient;
+    private final WebClient webClient;
+
+    public BookOrderService(@Qualifier("webClientForBookOrder") WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     /**
      * Creates a new book order.

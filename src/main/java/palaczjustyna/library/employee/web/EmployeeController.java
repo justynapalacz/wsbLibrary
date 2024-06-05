@@ -1,12 +1,11 @@
 package palaczjustyna.library.employee.web;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import palaczjustyna.library.book.domain.BookNotFoundException;
 import palaczjustyna.library.employee.application.EmployeeApplication;
 import palaczjustyna.library.employee.domain.Employee;
 import palaczjustyna.library.employee.domain.EmployeeDTO;
@@ -29,10 +28,10 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeApplication employeeApplication;
+    private final EmployeeApplication employeeApplication;
 
     /**
      * Retrieves all employee records.
@@ -94,7 +93,7 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     Employee updateEmployee(@PathVariable(value = "id")  Integer id, @RequestBody EmployeeDTO employeeDTO){
         log.info("Update employee. EmployeeDTO : {}", employeeDTO);
-        return employeeApplication.updateEmployee(employeeDTO);
+        return employeeApplication.updateEmployee(id, employeeDTO);
     }
 
     /**

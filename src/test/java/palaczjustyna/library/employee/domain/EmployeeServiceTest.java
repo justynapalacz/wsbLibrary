@@ -53,7 +53,7 @@ public class EmployeeServiceTest {
         String password = "jannowak";
         String email = "jan@wp.pl";
         SecurityRoles role = SecurityRoles.READER;
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, firstName, lastName, dateOfBirth, login, password, email, role);
+        EmployeeDTO employeeDTO = new EmployeeDTO(firstName, lastName, dateOfBirth, login, password, email, role);
         Employee employee = new Employee();
         employee.setId(id);
         employee.setFirstName(firstName);
@@ -103,7 +103,7 @@ public class EmployeeServiceTest {
         String email = "jan@wp.pl";
         SecurityRoles role = SecurityRoles.READER;
 
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, firstName, lastName, dateOfBirth, null, password, email, role);
+        EmployeeDTO employeeDTO = new EmployeeDTO(firstName, lastName, dateOfBirth, null, password, email, role);
 
         Employee employee = new Employee();
         employee.setId(id);
@@ -119,7 +119,7 @@ public class EmployeeServiceTest {
         when(employeeRepository.findById(id)).thenReturn(Optional.of(employee));
 
         //when
-        var result = employeeService.updateEmployee(employeeDTO);
+        var result = employeeService.updateEmployee(id, employeeDTO);
 
         //then
         assertNotNull(result);
@@ -144,10 +144,10 @@ public class EmployeeServiceTest {
     public void shouldReturnExceptionEmployeeByIdNotFound() {
         //given
         Integer id = 1;
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, null, null, null, null, null, null, null);
+        EmployeeDTO employeeDTO = new EmployeeDTO(null, null, null, null, null, null, null);
 
         //when
-        EmployeeNotFoundException thrown = assertThrows(EmployeeNotFoundException.class, () -> employeeService.updateEmployee(employeeDTO));
+        EmployeeNotFoundException thrown = assertThrows(EmployeeNotFoundException.class, () -> employeeService.updateEmployee(id, employeeDTO));
 
         // then
         assertTrue(thrown.getMessage().contains("Employee not found for id: 1"));

@@ -39,6 +39,7 @@ public class UserControllerTest {
         assertThat(result).hasSize(1);
         assertEquals(id, result.get(0).id());
     }
+
     @Test
     public void testShouldUpdateUser() {
         //given
@@ -46,7 +47,7 @@ public class UserControllerTest {
         String firstName = "Jan";
         String lastName = "Nowak";
         UserDTO userDTO = new UserDTO(id, firstName, lastName,null,null,null,null );
-        when(userApplication.updateUser(userDTO)).thenReturn(userDTO);
+        when(userApplication.updateUser(id, userDTO)).thenReturn(userDTO);
 
         //when
         var result = userController.updateUser(id, userDTO);

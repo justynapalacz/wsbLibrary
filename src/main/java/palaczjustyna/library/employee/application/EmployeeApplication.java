@@ -1,7 +1,7 @@
 package palaczjustyna.library.employee.application;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.employee.domain.Employee;
 import palaczjustyna.library.employee.domain.EmployeeDTO;
@@ -24,9 +24,10 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class EmployeeApplication {
-    @Autowired
-    private EmployeeService employeeService;
+
+    private final EmployeeService employeeService;
 
     /**
      * Retrieves all employees.
@@ -62,12 +63,13 @@ public class EmployeeApplication {
     /**
      * Updates an employee based on the provided {@link EmployeeDTO}.
      *
+     * @param id the ID of the employee record to update.
      * @param employeeDTO the {@link EmployeeDTO} object containing the updated details of the employee
      * @return the updated employee
      */
-    public Employee updateEmployee(EmployeeDTO employeeDTO) {
+    public Employee updateEmployee(Integer id, EmployeeDTO employeeDTO) {
         log.info("Update employee. EmployeeDTO : {}", employeeDTO);
-        return employeeService.updateEmployee(employeeDTO);
+        return employeeService.updateEmployee(id, employeeDTO);
     }
 
     /**

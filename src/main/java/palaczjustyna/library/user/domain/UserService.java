@@ -1,7 +1,7 @@
 package palaczjustyna.library.user.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.user.infrastructure.UserRepository;
 
@@ -14,12 +14,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     /**
      * Retrieves all users.
@@ -47,12 +46,13 @@ public class UserService {
     /**
      * Updates a user.
      *
+     * @param id   the ID of the user to update
      * @param userUpdate the {@link UserDTO} object containing updated user information
      * @return the updated {@link UserDTO}
      */
-    public UserDTO updateUser(UserDTO userUpdate) {
+    public UserDTO updateUser(Integer id, UserDTO userUpdate) {
         log.info("Update User. UserDTO: {}", userUpdate);
-        User user = this.findById(userUpdate.id());
+        User user = this.findById(id);
         if (userUpdate.firstName() != null) {
             user.setFirstName(userUpdate.firstName());
         }

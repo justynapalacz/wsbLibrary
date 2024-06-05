@@ -1,7 +1,7 @@
 package palaczjustyna.library.book.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.book.infrastructure.BookRepository;
 
@@ -23,12 +23,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class BookService {
-    @Autowired
-    private BookRepository bookRepository;
 
-    @Autowired
-    private BookMapper bookMapper;
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     /**
      * Retrieves all books.

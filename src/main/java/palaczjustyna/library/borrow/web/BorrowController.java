@@ -1,8 +1,8 @@
 package palaczjustyna.library.borrow.web;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,10 +30,10 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 public class BorrowController {
 
-    @Autowired
-    private BorrowApplication borrowApplication;
+    private final BorrowApplication borrowApplication;
 
     /**
      * Retrieves all borrow records.

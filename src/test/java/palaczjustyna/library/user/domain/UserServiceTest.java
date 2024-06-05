@@ -89,7 +89,7 @@ public class UserServiceTest {
         when(userMapper.mapToUserDTO(any())).thenReturn(userDTO);
 
         //when
-        var result = userService.updateUser(userDTO);
+        var result = userService.updateUser(id, userDTO);
 
         //then
         assertNotNull(result);
@@ -191,7 +191,7 @@ public class UserServiceTest {
         UserDTO userDTO = new UserDTO(id, null, null, null, null, null, null);
 
         //when
-        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> userService.updateUser(userDTO));
+        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> userService.updateUser(id, userDTO));
 
         // then
         assertTrue(thrown.getMessage().contains("User not found for id: 1"));

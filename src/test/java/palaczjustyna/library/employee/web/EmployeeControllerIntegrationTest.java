@@ -31,7 +31,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
     @Test
     void shouldAddEmployee() {
         //given
-        EmployeeDTO employeeDTO = new EmployeeDTO(null, "Jan", "Kowalski", LocalDate.of(2000, 2, 4),
+        EmployeeDTO employeeDTO = new EmployeeDTO("Jan", "Kowalski", LocalDate.of(2000, 2, 4),
                 "kowalski", "kowalski", "kowalski@gmail.com", SecurityRoles.READER);
 
         //when
@@ -75,13 +75,13 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
         var employees = getAllEmployee();
         var employeeIdToUpdate = employees[0].getId();
 
-        EmployeeDTO employeeDTO = new EmployeeDTO(employeeIdToUpdate, newFirsName, null, null,
+        EmployeeDTO employeeDTO = new EmployeeDTO(newFirsName, null, null,
                 null, null, null, null);
 
         //when
         var result = WebClient.create("http://localhost:" + port )
                 .method(HttpMethod.PUT)
-                .uri(builder -> builder.path("/employees/{id}").build(employeeIdToUpdate))
+                .uri(builder -> builder.path("/employees/"+employeeIdToUpdate).build(employeeIdToUpdate))
                 .headers(headers -> headers.setBasicAuth("root", "root"))
                 .body(BodyInserters.fromValue(employeeDTO))
                 .retrieve()

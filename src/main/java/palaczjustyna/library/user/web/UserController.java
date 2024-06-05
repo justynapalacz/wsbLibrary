@@ -1,7 +1,7 @@
 package palaczjustyna.library.user.web;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,10 +20,10 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserApplication userApplication;
+    private final UserApplication userApplication;
 
 
     /**
@@ -51,7 +51,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     UserDTO updateUser(@PathVariable (value = "id")  Integer id, @RequestBody UserDTO user){
         log.info("Update User. UserDTO: {}", user);
-        return userApplication.updateUser(user);
+        return userApplication.updateUser(id, user);
     }
 
     /**

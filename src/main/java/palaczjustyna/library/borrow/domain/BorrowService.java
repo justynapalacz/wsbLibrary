@@ -1,7 +1,7 @@
 package palaczjustyna.library.borrow.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.book.application.BookApplication;
@@ -40,20 +40,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BorrowService {
 
-    @Autowired
-    private BorrowRepository borrowRepository;
+    private final BorrowRepository borrowRepository;
+    private final UserApplication userApplication;
+    private final BookApplication bookApplication;
+    private final EmailApplication emailApplication;
+    private final BorrowMapper borrowMapper;
 
-    @Autowired
-    private UserApplication userApplication;
-
-    @Autowired
-    private BookApplication bookApplication;
-
-    @Autowired
-    private EmailApplication emailApplication;
-
-    @Autowired
-    private BorrowMapper borrowMapper;
+    public BorrowService(BorrowRepository borrowRepository, UserApplication userApplication, BookApplication bookApplication, EmailApplication emailApplication, BorrowMapper borrowMapper) {
+        this.borrowRepository = borrowRepository;
+        this.userApplication = userApplication;
+        this.bookApplication = bookApplication;
+        this.emailApplication = emailApplication;
+        this.borrowMapper = borrowMapper;
+    }
 
     @Value("${penalty.rate}")
     private double penaltyRate;
@@ -69,7 +68,7 @@ public class BorrowService {
      */
     public List<BorrowDTO> getAllBorrows() {
         log.info("Get all borrows");
-        return ((List<Borrow>) borrowRepository.findAll()).stream().map(barrow -> borrowMapper.mapToBarrowDTO(barrow)).toList();
+        return ((List<Borrow>) borrowRepository.findAll()).stream().map(borrowMapper::mapToBarrowDTO).toList();
     }
 
     /**

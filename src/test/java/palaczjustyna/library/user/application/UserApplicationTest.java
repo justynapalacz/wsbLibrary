@@ -64,10 +64,10 @@ public class UserApplicationTest {
         String firstName = "Jan";
         String lastName = "Nowak";
         UserDTO userDTO = new UserDTO(id, firstName, lastName,null,null,null,null );
-        when(userService.updateUser(userDTO)).thenReturn(userDTO);
+        when(userService.updateUser(id, userDTO)).thenReturn(userDTO);
 
         //when
-        var result = userApplication.updateUser(userDTO);
+        var result = userApplication.updateUser(id, userDTO);
 
         //then
         assertNotNull(result);

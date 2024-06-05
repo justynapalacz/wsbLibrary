@@ -1,7 +1,7 @@
 package palaczjustyna.library.email.application;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import palaczjustyna.library.email.domain.EmailService;
 import palaczjustyna.library.email.domain.EmailToSendDTO;
@@ -19,10 +19,10 @@ import palaczjustyna.library.email.domain.EmailToSendDTO;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class EmailApplication {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     /**
      * Sends an email to the user based on the provided {@link EmailToSendDTO}.
